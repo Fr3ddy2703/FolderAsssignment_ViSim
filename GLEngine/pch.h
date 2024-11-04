@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include "Window/window.h"
 #include "Color.h"
-#include <../libs/LASzip/dll/laszip_api.h>
+//#include <../libs/laz/dll/laszip_api.h>
 #include <iostream>
 #include <sstream>
 #include <fstream>

@@ -92,6 +92,8 @@
 //    }
 //}
 
+
+// Calculation for B-Spline surface
 glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 surfacePoint(0.0f);
@@ -116,6 +118,7 @@ glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, 
 	return surfacePoint;
 }
 
+// Calculation for B-Spline surface normal
 glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 P = BSpline::evaluateBSplineSurface(_u, _v, _du, _dv, _uKnot, _vKnot,
@@ -135,6 +138,7 @@ glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, i
 	return N;
 }
 
+// Recursive Cox De Boor algorithm
 float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<float>& _knotVector)
 {
 	if (_d == 0)
