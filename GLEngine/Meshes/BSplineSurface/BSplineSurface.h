@@ -4,8 +4,8 @@
 class BSplineSurface : public Mesh
 {
 public:
-	std::vector<Vertex> mVertices;
-	std::vector<Triangle> mIndices;
+	//std::vector<Vertex> mVertices;
+	//std::vector<Triangle> mIndices;
 
 	BSplineSurface(){};
 

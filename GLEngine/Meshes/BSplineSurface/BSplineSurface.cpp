@@ -19,7 +19,7 @@ void BSplineSurface::CreateBSplineSurface(int _UResolution, int _VResolution, in
 			glm::vec3 surfacePointNormal = BSpline::evaluateBSplineNormal(u, v, _du, _dv, _UResolution, _VResolution, _uKnot,
 				_vKnot, _controlPoints);
 
-			mVertices.push_back(Vertex(surfacePoint, surfacePointNormal));
+			Vertices.push_back(Vertex(surfacePoint, surfacePointNormal));
         }
     }
     for (int i = 0; i < _UResolution - 1; i++)
@@ -31,8 +31,8 @@ void BSplineSurface::CreateBSplineSurface(int _UResolution, int _VResolution, in
 			int bottomleft = (i + 1) * _VResolution + j;
 			int bottomright = bottomleft + 1;
 
-			mIndices.push_back(Triangle(topleft, bottomleft, topright));
-			mIndices.push_back(Triangle(topright, bottomleft, bottomright));
+			Indices.push_back(Triangle(topleft, bottomleft, topright));
+			Indices.push_back(Triangle(topright, bottomleft, bottomright));
         }
     }
     BindBuffer();
@@ -46,7 +46,7 @@ void BSplineSurface::Draw()
     model = glm::scale(model, size);
     glUniformMatrix4fv(glGetUniformLocation(Shader::ShaderProgram, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
     glBindVertexArray(VAO);
-    glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
+    glDrawElements(GL_TRIANGLES, Indices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
     glBindVertexArray(0);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
@@ -64,10 +64,10 @@ void BSplineSurface::BindBuffer()
     glGenBuffers(1, &EBO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, Vertices.size() * sizeof(Vertex), Vertices.data(), GL_STATIC_DRAW);
 
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(Triangle), mIndices.data(), GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, Indices.size()*sizeof(Triangle), Indices.data(), GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, position)));
