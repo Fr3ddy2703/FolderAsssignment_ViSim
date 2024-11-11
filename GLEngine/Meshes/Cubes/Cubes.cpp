@@ -1,20 +1,20 @@
 #include "pch.h"
 #include "Cubes.h"
-#include "../../Shaders/Shader.h"
+#include "../../Shaders/shader.h"
 
-void Cube::CreateCube(glm::vec3 size, glm::vec3 pos, glm::vec3 color)
+void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
 {
-    GetPosition() = pos;
-    GetScale() = size;
+    GetPosition() = mPosition;
+    GetScale() = mSize;
 
-    Vertex v0{glm::vec3(0.f, 0.f, 0.f), color}; /* Front-Bot-left */
-    Vertex v1{glm::vec3(1.f, 0.f, 0.f), color}; /* Front-Bot-right */
-    Vertex v2{glm::vec3(1.f, 1.f, 0.f), color}; /* Front-Top-right */
-    Vertex v3{glm::vec3(0.f, 1.f, 0.f), color}; /* Front-Top-left */
-    Vertex v4{glm::vec3(0.f, 0.f, -1.f), color}; /* Back-Bot-left */
-    Vertex v5{glm::vec3(1.f, 0.f, -1.f), color}; /* Back-Bot-right */
-    Vertex v6{glm::vec3(1.f, 1.f, -1.f), color}; /* Back-Top-right */
-    Vertex v7{glm::vec3(0.f, 1.f, -1.f), color}; /* Back-Top-left */
+    Vertex v0{glm::vec3(0.f, 0.f, 0.f), _color}; /* Front-Bot-left */
+    Vertex v1{glm::vec3(1.f, 0.f, 0.f), _color}; /* Front-Bot-right */
+    Vertex v2{glm::vec3(1.f, 1.f, 0.f), _color}; /* Front-Top-right */
+    Vertex v3{glm::vec3(0.f, 1.f, 0.f), _color}; /* Front-Top-left */
+    Vertex v4{glm::vec3(0.f, 0.f, -1.f), _color}; /* Back-Bot-left */
+    Vertex v5{glm::vec3(1.f, 0.f, -1.f), _color}; /* Back-Bot-right */
+    Vertex v6{glm::vec3(1.f, 1.f, -1.f), _color}; /* Back-Top-right */
+    Vertex v7{glm::vec3(0.f, 1.f, -1.f), _color}; /* Back-Top-left */
 
     mVertices.emplace_back(v0);
     mVertices.emplace_back(v1);
@@ -51,68 +51,69 @@ void Cube::CreateCube(glm::vec3 size, glm::vec3 pos, glm::vec3 color)
 
     for (auto element : mIndices)
     {
-        glm::vec3 normal = glm::cross(mVertices[element.index2].position - mVertices[element.index1].position,
-                                      mVertices[element.index3].position - mVertices[element.index1].position);
-        mVertices[element.index1].normal += glm::normalize(normal);
-        mVertices[element.index2].normal += glm::normalize(normal);
-        mVertices[element.index3].normal += glm::normalize(normal);
+        glm::vec3 normal = glm::cross(mVertices[element.mIndex2].mPosition - mVertices[element.mIndex1].mPosition,
+                                      mVertices[element.mIndex3].mPosition - mVertices[element.mIndex1].mPosition);
+        mVertices[element.mIndex1].mNormal += glm::normalize(normal);
+        mVertices[element.mIndex2].mNormal += glm::normalize(normal);
+        mVertices[element.mIndex3].mNormal += glm::normalize(normal);
     }
 
-    BindBuffer();
+   BindBuffer();
 }
 
 glm::vec3& Cube::GetPosition()
 {
-    return position;
+    return mPosition;
 }
 
 glm::vec3& Cube::GetScale()
 {
-	return size;
-}
-
-void Cube::BindBuffer()
-{
-    // VAO
-    glGenBuffers(1, &VBO);
-
-    // VAO
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
-
-    // VBO
-    glGenBuffers(1, &EBO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(Triangle), mIndices.data(), GL_STATIC_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, position)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, Color)));
-    glEnableVertexAttribArray(2);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, normal)));
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
+	return mSize;
 }
 
 
-void Cube::AddCollider(glm::vec3 scale, ECollisionType collisionType, glm::vec3 offset)
+void Cube::AddCollider(glm::vec3 _scale, ECollisionType _collisionType, glm::vec3 _offset)
 {
-    	Collider = Collision(GetPosition()+offset, scale, offset, collisionType);
+    	mCollider = Collision(GetPosition()+_offset, _scale, _offset, _collisionType);
 }
 
 void Cube::Draw()
 {
-    glm::mat4 model = glm::mat4(1.f);
-    model = glm::translate(model, position);
-    model = glm::scale(model, size);
+	glm::mat4 model = glm::mat4(1.f);
+    model = glm::translate(model, mPosition);
+    model = glm::scale(model, mSize);
     glUniformMatrix4fv(glGetUniformLocation(Shader::ShaderProgram, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
-    glBindVertexArray(VAO);
+    glBindVertexArray(mVAO);
     glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
+    glBindVertexArray(0);
+}
+
+
+void Cube::BindBuffer()
+{
+    // VAO
+    glGenBuffers(1, &mVBO);
+
+    // VAO
+    glGenVertexArrays(1, &mVAO);
+    glBindVertexArray(mVAO);
+
+    // VBO
+    glGenBuffers(1, &mEBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size()*sizeof(Triangle), mIndices.data(), GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mPosition)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mColor)));
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mNormal)));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
