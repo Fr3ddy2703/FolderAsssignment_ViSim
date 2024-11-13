@@ -118,16 +118,16 @@ void initializer::Create()
 {
     for (int j = 0; j < resolution; j++)
     {
-		/* For  */
+		/* For each corner in a square */
         int topLeft = i * (resolution + 1) + j;
         int topRight = topLeft + 1;
         int bottomLeft = topLeft + (resolution + 1);
         int bottomRight = bottomLeft + 1;
 
-        // First triangle of the cell
+        // First triangle of the square
         index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
 
-        // Second triangle of the cell
+        // Second triangle of the square
         index.push_back(Triangle(topLeft, bottomRight, topRight));
     }
 }
