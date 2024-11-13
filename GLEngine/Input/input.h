@@ -7,13 +7,13 @@ struct GLFWwindow;
 class input
 {
 public:
-	static void framebuffer_size_callback(GLFWwindow* window, int width,int height);
+	static void framebuffer_size_callback(GLFWwindow* _window, int _width,int _height);
 };
 
 class KeyBoardInput
 {
 public:
-	static void processInput(GLFWwindow* window, std::shared_ptr<Player> player);
+	static void processInput(GLFWwindow* _window, std::shared_ptr<Player> _player);
 };
 
 namespace MouseInput
@@ -28,6 +28,6 @@ namespace MouseInput
 
 	extern float fov;
 
-	void mouse_callback(GLFWwindow* window, double posX, double posY);
+	void mouse_callback(GLFWwindow* _window, double _posX, double _posY);
 }
 

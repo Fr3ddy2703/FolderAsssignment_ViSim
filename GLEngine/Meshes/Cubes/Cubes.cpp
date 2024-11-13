@@ -2,6 +2,7 @@
 #include "Cubes.h"
 #include "../../Shaders/shader.h"
 
+/* Creation of Cubes */
 void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
 {
     GetPosition() = mPosition;
@@ -61,6 +62,14 @@ void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
    BindBuffer();
 }
 
+/* Creation of Surface based on the point cloud */
+void Cube::CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices)
+{
+	mVertices = _vertices;
+    mIndices = _indices;
+    BindBuffer();
+}
+
 glm::vec3& Cube::GetPosition()
 {
     return mPosition;
@@ -87,7 +96,6 @@ void Cube::Draw()
     glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
     glBindVertexArray(0);
 }
-
 
 void Cube::BindBuffer()
 {

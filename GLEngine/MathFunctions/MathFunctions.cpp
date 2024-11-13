@@ -4,7 +4,7 @@
 
 
 
-//int MathFunctions::findKnotInterval(float x)
+//int MathFunctions::findKnotInterval(float _x)
 //{
 //	int my = n - 1;
 //
@@ -12,7 +12,7 @@
 //	return my;
 //}
 //
-//void MathFunctions::deBoorsAlgorithm(float x)
+//void MathFunctions::deBoorsAlgorithm(float _x)
 //{
 //}
 

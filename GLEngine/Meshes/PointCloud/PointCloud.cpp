@@ -3,6 +3,7 @@
 #include "../../Shaders/shader.h"
 
 
+/* Reading and creating the pointcloud for the project */
 void PointCloud::CreatePointCloudFromFile(const char* _fileDirectory, float _scaleFactor)
 {
    // Open the file
@@ -31,6 +32,9 @@ void PointCloud::CreatePointCloudFromFile(const char* _fileDirectory, float _sca
         }
         std::cout << "Total points: " << totalPoints << "\n"; // Optionally print the total points
     }
+
+    
+    /* Setting a terrain offset so the pointcloud spawns in a preferable place for the camera */
     glm::vec3 terrainOffset(621600.f, 676.f,6759897.f);
     // Now continue reading the rest of the lines as the point cloud data
     while (std::getline(file, line))
@@ -45,9 +49,9 @@ void PointCloud::CreatePointCloudFromFile(const char* _fileDirectory, float _sca
             std::cout << "Failed to parse line " << lineNumber << ": " << line << "\n";
             continue; // Skip this line if parsing fails
         }
-
         // Scale the coordinates and create a vertex
-        glm::vec3 colorf = glm::vec3(Color::Black);
+        glm::vec3 colorf = glm::vec3(Color::Red);
+        /* Swapping the y and z coordinates so the terrain will be horizontal and not vertical */
 		glm::vec3 vpos = (glm::vec3(x, z, y) - terrainOffset) * _scaleFactor;
 
         mVertices.push_back(Vertex(vpos, colorf));
@@ -55,7 +59,8 @@ void PointCloud::CreatePointCloudFromFile(const char* _fileDirectory, float _sca
 
         mIndices.push_back(Triangle(mVertices.size() - 1, mVertices.size() - 1, mVertices.size() - 1));
     }
-	BindBuffer();
+    BindBuffer();
+
     std::cout << "Finished reading point cloud from file, processed " << lineNumber - 1 << " data lines\n"; // Subtract 1 for metadata line
 
 }
@@ -71,6 +76,8 @@ void PointCloud::Draw()
     glBindVertexArray(0);
 }
 
+
+/* Binding buffers */
 void PointCloud::BindBuffer()
 {
     // VAO

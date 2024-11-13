@@ -2,8 +2,8 @@
 class window
 {
 	public:
-	static float width;
-	static float height;
+	static float mWidth;
+	static float mHeight;
 
 	static GLFWwindow* initWindow();
 };

@@ -4,8 +4,8 @@ class MathFunctions
 public:
 	int n = 1;
 
-	int findKnotInterval(float x);
-	void deBoorsAlgorithm(float x);
+	int findKnotInterval(float _x);
+	void deBoorsAlgorithm(float _x);
 	//static std::vector<glm::vec3> LASFileToPoints(const char* _fileDirectory);
 	//static void LASFileToCustomFileOfPoints(const char* _fileDirectoryInn, const char* _fileDirectoryOut);
 };
@@ -15,7 +15,6 @@ class BSpline
 public:
 
 	/* Public variables */
-
 
 
 	static glm::vec3 evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, 

@@ -3,7 +3,7 @@
 #include "../../MathFunctions/MathFunctions.h"
 #include "../../Shaders/Shader.h"
 
-
+/* Creation of B-spline */
 void BSplineSurface::CreateBSplineSurface(int _UResolution, int _VResolution, int _du, int _dv, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
         for (int i = 0; i < _UResolution; i++)

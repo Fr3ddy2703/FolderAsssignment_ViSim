@@ -15,26 +15,27 @@ class initializer
 public:
 
 	/* Public variables*/
-	GLFWwindow *window;
-	static camera UseCamera;
-	static float DeltaTime;
-	Cube Floor;
-	Cube Wall;
-	Cube Wall2;
-	Cube Wall3;
-	Cube Wall4;
+	GLFWwindow *mWindow;
+	static camera mUseCamera;
+	static float mDeltaTime;
+	Cube mFloor;
+	Cube mWall;
+	Cube mWall2;
+	Cube mWall3;
+	Cube mWall4;
+	Cube mSurface;
 
 	/* Degrees for the Bi-Quadratic */
-	int Du = 2;
-	int Dv = 2;
+	int mDu = 2;
+	int mDv = 2;
 
-	int UResolution = 20;
-	int VResolution = 20;
+	int mUResolution = 20;
+	int mVResolution = 20;
 
-	std::vector<float> uKnot = {0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0};
-	std::vector<float> vKnot = {0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0}; 
+	std::vector<float> mUKnot = {0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0};
+	std::vector<float> mVKnot = {0.0, 0.0, 0.0, 1.0, 2.0, 2.0, 2.0}; 
 
-	std::vector<std::vector<glm::vec3>> controlPoints = {
+	std::vector<std::vector<glm::vec3>> mControlPoints = {
 		{glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0), glm::vec3(2.0, 0.0, 0.0)},
 		{glm::vec3(0.0, 1.0, 1.0), glm::vec3(1.0, 2.0, 1.0), glm::vec3(2.0, 1.0, 1.0)},
 		{glm::vec3(0.0, 0.0, 2.0), glm::vec3(1.0, 1.0, 2.0), glm::vec3(2.0, 0.0, 2.0)}
@@ -42,27 +43,27 @@ public:
 
 	
 	/* Public Functions */
-	initializer(){};
+	initializer() = default;
 
 	virtual void Initialize();
 	virtual void Create();
 	virtual void Run();
-	virtual void Update(float deltaTime);
+	virtual void Update(float _deltaTime);
 
 	virtual  ~initializer();
 
 private:
 	/* private Shared Pointers */
-	std::vector<Cube> Cubes; 
-	std::vector<Spheres> Balls;
-	std::shared_ptr<BSplineSurface> bSplines;
-	std::shared_ptr<PointCloud> pCloud;
-	std::shared_ptr<Player> player;
-	std::shared_ptr<Enemy> enemy;
-	std::shared_ptr<Item> item;
+	std::vector<Cube> mCubes; 
+	std::vector<Spheres> mBalls;
+	std::shared_ptr<BSplineSurface> mBSplines;
+	std::shared_ptr<PointCloud> mPCloud;
+	std::shared_ptr<Player> mPlayer;
+	std::shared_ptr<Enemy> mEnemy;
+	std::shared_ptr<Item> mItem;
 
 	/* private variables */
-	bool render = true;
-	bool start = false;
+	bool mRender = true;
+	bool mStart = false;
 };
 

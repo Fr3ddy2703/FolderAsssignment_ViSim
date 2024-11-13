@@ -7,8 +7,7 @@ struct Vertex
 	glm::vec3 mColor = glm::vec3(0.f);
 	glm::vec3 mNormal = glm::vec3(0.f);
 	Vertex(glm::vec3 _position, glm::vec3 _rgb) : mPosition(_position), mColor(_rgb)
-	{
-	}
+	{}
 };
 
 struct Triangle
@@ -21,6 +20,8 @@ struct Triangle
 class Mesh
 {
 public:
+	Mesh() = default;
+	~Mesh() = default;
 	std::vector<Vertex> mVertices;
 	std::vector<Triangle> mIndices;
 	glm::vec3 mPosition = glm::vec3(1);

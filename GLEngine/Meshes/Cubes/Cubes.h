@@ -17,8 +17,8 @@ public:
 	glm::vec3& GetScale();
 	
 	void Draw();
-	//void DrawBoundingBox(unsigned int shaderProgram);
 	void CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color);
+	void CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices);
 	void AddCollider(glm::vec3 _scale,ECollisionType _collisionType, glm::vec3 _offset = glm::vec3(0.f));
 
 	void BindBuffer();
