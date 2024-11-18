@@ -7,8 +7,6 @@
 float initializer::mDeltaTime = 0.f;
 camera initializer::mUseCamera = camera();
 
-/* Systems */
-
 
 void initializer::Initialize()
 {
@@ -97,22 +95,44 @@ void initializer::Create()
 	float distZ = maxVertices.z - minVertices.z;
 	float distcapX = distX / resolution;
 	float distcapZ = distZ / resolution;
-	int numpoints = 0;
-	float avgposY = 0;
-	
+
 	for (int i = 0; i <= resolution; i++)
-	{
-		for (int j = 0; j <= resolution; j++)
-		{
-			for (Vertex& vert : mPCloud->mVertices)
-			{
-				avgposY += vert.mPosition.y;
-				avgposY /= numpoints;
-			}
-			vertices.push_back(Vertex(glm::vec3(minVertices.x + (distcapX * i), 0, minVertices.z + (distcapZ * j)), glm::vec3(0, i /resolution , j / resolution)));
-			numpoints++;
-		}
-	}
+{
+    for (int j = 0; j <= resolution; j++)
+    {
+		/* For each coordinates in the grid */
+        glm::vec3 gridPos(
+            minVertices.x + distcapX * i, 
+            0.0f,                         
+            minVertices.z + distcapZ * j   
+        );
+
+        /* Variables for the height */
+        float heightSum = 0.0f;
+        int heightCount = 0;
+
+        /* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
+        float thresholdDistance = 0.1f;
+
+        for (const Vertex& vert : mPCloud->mVertices)
+        {
+            float distance = glm::distance(glm::vec2(gridPos.x, gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
+
+            if (distance < thresholdDistance)
+            {
+                heightSum += vert.mPosition.y;
+                heightCount++;
+            }
+        }
+
+        // Calculate the average height based on nearby points
+        if (heightCount > 0) {
+            gridPos.y = heightSum / heightCount;
+        }
+
+        vertices.push_back(Vertex(gridPos, Color::Blue));
+    }
+}
 
 	for (int i = 0; i < resolution; i++)
 {
@@ -131,6 +151,16 @@ void initializer::Create()
         index.push_back(Triangle(topLeft, bottomRight, topRight));
     }
 }
+	/* Calculations for normals */
+	    for (const Triangle& triangle : index)
+    {
+        glm::vec3 normal = glm::cross(vertices[triangle.mIndex2].mPosition - vertices[triangle.mIndex1].mPosition,
+                                      vertices[triangle.mIndex3].mPosition - vertices[triangle.mIndex1].mPosition);
+        vertices[triangle.mIndex1].mNormal += glm::normalize(normal);
+        vertices[triangle.mIndex2].mNormal += glm::normalize(normal);
+        vertices[triangle.mIndex3].mNormal += glm::normalize(normal);
+    }
+
 
 
 	mSurface.CreateSurfaceFromPointCLoud(vertices, index);
@@ -190,7 +220,7 @@ void initializer::Run()
 		//mEnemy->drawEnemy();
 		//mItem->drawItem();
 		/*mBSplines->Draw();*/
-		mPCloud->Draw();
+		//mPCloud->Draw();
 		mSurface.Draw();
 	
 		glfwSwapBuffers(mWindow);
@@ -210,8 +240,4 @@ void initializer::Update(float _deltaTime)
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
 
 	//player->takeDamage();
-}
-
-initializer::~initializer()
-{
 }

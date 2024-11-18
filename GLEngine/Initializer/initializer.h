@@ -50,7 +50,7 @@ public:
 	virtual void Run();
 	virtual void Update(float _deltaTime);
 
-	virtual  ~initializer();
+	virtual ~initializer() = default;
 
 private:
 	/* private Shared Pointers */
