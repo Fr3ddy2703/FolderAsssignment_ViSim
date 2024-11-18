@@ -58,6 +58,8 @@ void initializer::Create()
 	mPCloud->CreatePointCloudFromFile(directory.c_str(), 0.01f);
 	mPCloud->mPosition;
 	mPCloud->mIndices;
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	/*Folder exam task 1.3 */
 	glm::vec3 minVertices = glm::vec3(0);
 	glm::vec3 maxVertices = glm::vec3(0);
 	for (Vertex& vertex : mPCloud->mVertices)
@@ -161,14 +163,15 @@ void initializer::Create()
         vertices[triangle.mIndex2].mNormal += glm::normalize(normal);
         vertices[triangle.mIndex3].mNormal += glm::normalize(normal);
     }
-
-
+	
 
 	mSurface.CreateSurfaceFromPointCLoud(vertices, index);
 
 	Spheres Sphere;
 	Sphere.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
 	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
+
+	//Barycentric::BarycentricCord(Sphere, mSurface);
 
 	/* Creating the balls */
 	Spheres kule;

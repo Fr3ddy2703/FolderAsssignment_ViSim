@@ -1,4 +1,9 @@
 #pragma once
+#include "../Meshes/Cubes/Cubes.h"
+class Cube;
+class Mesh;
+class Spheres;
+
 class MathFunctions
 {
 public:
@@ -8,6 +13,7 @@ public:
 	void deBoorsAlgorithm(float _x);
 	//static std::vector<glm::vec3> LASFileToPoints(const char* _fileDirectory);
 	//static void LASFileToCustomFileOfPoints(const char* _fileDirectoryInn, const char* _fileDirectoryOut);
+	float calculateNormal(glm::vec3&& vector1, glm::vec3&& vector2);
 };
 
 class BSpline
@@ -27,4 +33,11 @@ public:
 
 
 
+};
+
+class Barycentric : public MathFunctions, public Cube
+
+{
+public:
+	float BarycentricCord(std::shared_ptr<Spheres>_object, std::shared_ptr<Cube>_surface);
 };

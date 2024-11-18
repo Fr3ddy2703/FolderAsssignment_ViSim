@@ -1,7 +1,9 @@
 #include "pch.h"
 #include "MathFunctions.h"
 
-
+#include "../Meshes/Mesh.h"
+#include "../Meshes/Cubes/Cubes.h"
+#include "../Meshes/Sphere/Spheres.h"
 
 
 //int MathFunctions::findKnotInterval(float _x)
@@ -16,6 +18,10 @@
 //{
 //}
 
+float MathFunctions::calculateNormal(glm::vec3&& vector1, glm::vec3&& vector2)
+{
+    return vector1[0]* vector2[2]- vector2[0]*vector1[2];
+}
 
 // Calculation for B-Spline surface
 glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
@@ -89,4 +95,23 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 		return left + right;
 	}
 }
+
+
+//float Barycentric::BarycentricCord(std::shared_ptr<Spheres> _object, std::shared_ptr<Cube> _surface)
+//{
+//		for (const Triangle& triangle : _surface->mIndices)
+//	{
+//		float a = calculateNormal((_surface->mVertices[Triangle.mIndex1].mPosition - _surface->mVertices[Triangle.mIndex1].mPosition), (_surface->mVertices[Triangle.mIndex3].mPosition - _surface->mVertices[Triangle.mIndex1].mPosition));
+//		float u = calculateNormal((_surface->mVertices[Triangle.mIndex2].mPosition - _object->mPosition), (_surface->mVertices[Triangle.mIndex2].mPosition - _object->mPosition)) / a;
+//		float v = calculateNormal((_surface->mVertices[Triangle.mIndex3].mPosition - _object->mPosition), (_surface->mVertices[Triangle.mIndex3].mPosition - _object->mPosition)) / a;
+//		float w = 1 - v - u;
+//
+//		if (u >= 0 && v >= 0 && w >= 0)
+//		{
+//			return u * _surface->mVertices[Triangle.mIndex1].mPosition.y + v * _surface->mVertices[Triangle.mIndex2].mPosition.y + w * _surface->mVertices[Triangle.mIndex3].mPosition.y;
+//		}
+//	}
+//	return 0.f;
+//}
+
 
