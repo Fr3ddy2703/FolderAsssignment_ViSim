@@ -88,73 +88,74 @@ void initializer::Create()
 		}
 	}
 
+	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
-	int resolution = 10;
+	int resolution = 20;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
 	float distcapX = distX / resolution;
 	float distcapZ = distZ / resolution;
 
 	for (int i = 0; i <= resolution; i++)
-{
-    for (int j = 0; j <= resolution; j++)
-    {
-		/* For each coordinates in the grid */
-        glm::vec3 gridPos(
-            minVertices.x + distcapX * i, 
-            0.0f,                         
-            minVertices.z + distcapZ * j   
-        );
+	{
+		for (int j = 0; j <= resolution; j++)
+		{
+			/* For each coordinates in the grid */
+			glm::vec3 gridPos(
+				minVertices.x + distcapX * i, 
+				0.0f,                         
+				minVertices.z + distcapZ * j   
+			);
 
-        /* Variables for the height */
-        float heightSum = 0.0f;
-        int heightCount = 0;
+			/* Variables for the height */
+			float heightSum = 0.0f;
+			int heightCount = 0;
 
-        /* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
-        float thresholdDistance = 0.1f;
+			/* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
+			float thresholdDistance = 0.1f;
 
-        for (const Vertex& vert : mPCloud->mVertices)
-        {
-            float distance = glm::distance(glm::vec2(gridPos.x, gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
+			for (const Vertex& vert : mPCloud->mVertices)
+			{
+				float distance = glm::distance(glm::vec2(gridPos.x, gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
 
-            if (distance < thresholdDistance)
-            {
-                heightSum += vert.mPosition.y;
-                heightCount++;
-            }
-        }
+				if (distance < thresholdDistance)
+				{
+					heightSum += vert.mPosition.y;
+					heightCount++;
+				}
+			}
 
-        // Calculate the average height based on nearby points
-        if (heightCount > 0) {
-            gridPos.y = heightSum / heightCount;
-        }
+			// Calculate the average height based on nearby points
+			if (heightCount > 0) {
+				gridPos.y = heightSum / heightCount;
+			}
 
-        vertices.push_back(Vertex(gridPos, Color::Blue));
-    }
-}
+			vertices.push_back(Vertex(gridPos, Color::Blue));
+		}
+	}
 
 	for (int i = 0; i < resolution; i++)
-{
-    for (int j = 0; j < resolution; j++)
-    {
-		/* For each corner in a square */
-        int topLeft = i * (resolution + 1) + j;
-        int topRight = topLeft + 1;
-        int bottomLeft = topLeft + (resolution + 1);
-        int bottomRight = bottomLeft + 1;
+	{
+		for (int j = 0; j < resolution; j++)
+		{
+			/* For each corner in a square */
+			int topLeft = i * (resolution + 1) + j;
+			int topRight = topLeft + 1;
+			int bottomLeft = topLeft + (resolution + 1);
+			int bottomRight = bottomLeft + 1;
 
-        // First triangle of the square
-        index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
+			// First triangle of the square
+			index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
 
-        // Second triangle of the square
-        index.push_back(Triangle(topLeft, bottomRight, topRight));
-    }
-}
+			// Second triangle of the square
+			index.push_back(Triangle(topLeft, bottomRight, topRight));
+		}
+	}
 	/* Calculations for normals */
-	    for (const Triangle& triangle : index)
+	for (const Triangle& triangle : index)
     {
-        glm::vec3 normal = glm::cross(vertices[triangle.mIndex2].mPosition - vertices[triangle.mIndex1].mPosition,
+		glm::vec3 normal = glm::cross(vertices[triangle.mIndex2].mPosition - vertices[triangle.mIndex1].mPosition,
                                       vertices[triangle.mIndex3].mPosition - vertices[triangle.mIndex1].mPosition);
         vertices[triangle.mIndex1].mNormal += glm::normalize(normal);
         vertices[triangle.mIndex2].mNormal += glm::normalize(normal);
