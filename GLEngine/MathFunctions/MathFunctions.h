@@ -39,5 +39,9 @@ class Barycentric : public MathFunctions, public Cube
 
 {
 public:
-	float BarycentricCord(std::shared_ptr<Spheres>_object, std::shared_ptr<Cube>_surface);
+
+	float GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3 _p3, glm::vec3 _barycode);
+	bool BarycentricCord(Spheres _object, Cube _surface, float& height);
+	
+	glm::vec3 Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint);
 };

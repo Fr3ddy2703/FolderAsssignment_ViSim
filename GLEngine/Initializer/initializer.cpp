@@ -58,6 +58,7 @@ void initializer::Create()
 	mPCloud->CreatePointCloudFromFile(directory.c_str(), 0.01f);
 	mPCloud->mPosition;
 	mPCloud->mIndices;
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	/*Folder exam task 1.3 */
 	glm::vec3 minVertices = glm::vec3(0);
@@ -93,7 +94,7 @@ void initializer::Create()
 	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
-	int resolution = 20;
+	int resolution = 10;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
 	float distcapX = distX / resolution;
@@ -168,22 +169,22 @@ void initializer::Create()
 	mSurface.CreateSurfaceFromPointCLoud(vertices, index);
 
 	Spheres Sphere;
-	Sphere.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
 	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
 
-	//Barycentric::BarycentricCord(Sphere, mSurface);
 
-	/* Creating the balls */
-	Spheres kule;
-	kule.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.f, 0.75f, 7.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
-	kule.AddCollider(kule.GetScale(), ECollisionType::ball);
+
+	///* Creating the balls */
+	//Spheres kule;
+	//kule.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.f, 0.75f, 7.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	//kule.AddCollider(kule.GetScale(), ECollisionType::ball);
 	
 	mCubes.emplace_back(mFloor);
 	mCubes.emplace_back(mWall);
 	mCubes.emplace_back(mWall2);
 	mCubes.emplace_back(mWall3);
 	mCubes.emplace_back(mWall4);
-	mBalls.push_back(kule);
+	//mBalls.push_back(kule);
 	mBalls.push_back(Sphere);
 
 }
@@ -201,6 +202,19 @@ void initializer::Run()
 		mDeltaTime = CurrentFrame - FirstFrame;
 		FirstFrame = CurrentFrame;
 
+		Barycentric mBarycentric;
+		for (Spheres& ball : mBalls)
+		{
+			float ballheight = ball.mPosition.y;
+			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight))
+			{
+
+				ball.mPosition.y = ballheight;
+			}
+			ball.mVelocity = glm::vec3(-0.1F, 0, 0);
+			ball.mPosition += ball.mVelocity * mDeltaTime; 
+		}
+		
 		glClearColor(color.x, color.y, color.z, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(Shader::ShaderProgram);
@@ -216,10 +230,10 @@ void initializer::Run()
 		//{
 		//	cube.Draw();
 		//}
-		//for (auto& sphere : mBalls)
-		//{
-		//	sphere.DrawSphere();
-		//}
+		for (auto& sphere : mBalls)
+		{
+			sphere.DrawSphere();
+		}
 		//mPlayer->drawPlayer();
 		//mEnemy->drawEnemy();
 		//mItem->drawItem();
@@ -240,7 +254,6 @@ void initializer::Update(float _deltaTime)
 	{
 		collision.bounceBack(mEnemy, mPlayer, 1.f);
 	}
-
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
 
 	//player->takeDamage();

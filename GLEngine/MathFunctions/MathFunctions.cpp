@@ -5,6 +5,8 @@
 #include "../Meshes/Cubes/Cubes.h"
 #include "../Meshes/Sphere/Spheres.h"
 
+#include "glm/glm.hpp"
+
 
 //int MathFunctions::findKnotInterval(float _x)
 //{
@@ -97,21 +99,78 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 }
 
 
-//float Barycentric::BarycentricCord(std::shared_ptr<Spheres> _object, std::shared_ptr<Cube> _surface)
-//{
-//		for (const Triangle& triangle : _surface->mIndices)
-//	{
-//		float a = calculateNormal((_surface->mVertices[Triangle.mIndex1].mPosition - _surface->mVertices[Triangle.mIndex1].mPosition), (_surface->mVertices[Triangle.mIndex3].mPosition - _surface->mVertices[Triangle.mIndex1].mPosition));
-//		float u = calculateNormal((_surface->mVertices[Triangle.mIndex2].mPosition - _object->mPosition), (_surface->mVertices[Triangle.mIndex2].mPosition - _object->mPosition)) / a;
-//		float v = calculateNormal((_surface->mVertices[Triangle.mIndex3].mPosition - _object->mPosition), (_surface->mVertices[Triangle.mIndex3].mPosition - _object->mPosition)) / a;
-//		float w = 1 - v - u;
-//
-//		if (u >= 0 && v >= 0 && w >= 0)
-//		{
-//			return u * _surface->mVertices[Triangle.mIndex1].mPosition.y + v * _surface->mVertices[Triangle.mIndex2].mPosition.y + w * _surface->mVertices[Triangle.mIndex3].mPosition.y;
-//		}
-//	}
-//	return 0.f;
-//}
+float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3 _p3,  glm::vec3 _barycode)
+{
+	return(_p1.y * _barycode.x + _p2.y * _barycode.y + _p3.y * _barycode.z);
+}
+
+bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& height)
+{
+	static int counter = 0;
+	static int counter2 = 0;
+	for (auto Triangle : _surface.mIndices)
+	{
+		counter++;
+		bool test = false;
+		glm::vec3 barycord = Getbarrycord(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, _object.mPosition);
+
+		if (barycord.x == 0 &&
+			barycord.y == 0 &&
+			barycord.z == 0)
+		{
+			_object.mPosition = _object.GetPosition() + glm::vec3(0.1, 0, 0.1);
+			BarycentricCord(_object, _surface, height);
+		}
+		if (barycord.x > 0 && barycord.x < 1 && 
+			barycord.y > 0 && barycord.y < 1 &&
+			barycord.z > 0 && barycord.z < 1)
+		{
+			counter2++;
+			height = GetHeight(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, barycord);
+			std::cout << height << std::endl;
+			height += 2;
+
+			return true;
+		}
+	}
+	return false;
+}
+
+glm::vec3 Barycentric::Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint)
+{
+	_p1.y = 0;
+	_p2.y = 0;
+	_p3.y = 0;
+	_ballpoint.y = 0;
+	glm::vec3 barcoords;
+
+	glm::vec3 p12 = _p2 - _p1;
+	glm::vec3 p13 = _p3 - _p1;
+
+	glm::vec3 n123 = glm::cross(p12, p13);
+
+	float area123 = n123.y;
+
+	glm::vec3 obj1 = _p1 - _ballpoint;
+	glm::vec3 obj2 = _p2 - _ballpoint;
+	glm::vec3 obj3 = _p3 - _ballpoint;
+
+	glm::vec3 subn1 = glm::cross(obj1, obj2);
+	glm::vec3 subn2 = glm::cross(obj2, obj3);
+	glm::vec3 subn3 = glm::cross(obj3, obj1);
+
+
+	float subtriangle1 = subn2.y;
+
+	float subtriangle2 = subn3.y;
+
+	float subtriangle3 = subn1.y;
+
+	barcoords.x = subtriangle1 / area123; 
+	barcoords.y = subtriangle2 / area123; 
+	barcoords.z = subtriangle3 / area123; 
+
+	return barcoords;
+}
 
 

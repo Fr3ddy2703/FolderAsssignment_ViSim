@@ -75,8 +75,8 @@ void Spheres::SubDivide(int _index1, int _index2, int _index3, int _n)
         int index6 = index4 + 2;
 
         SubDivide(_index1, index4, index5, _n - 1);
-        SubDivide(_index2, index5, index6, _n - 1);
-        SubDivide(_index3, index6, index4, _n - 1);
+        SubDivide(_index3, index5, index6, _n - 1);
+        SubDivide(_index2, index6, index4, _n - 1);
         SubDivide(index6, index5, index4, _n - 1);
 	}
 	else
@@ -98,6 +98,7 @@ void Spheres::DrawSphere()
 	glm::mat4 model = glm::mat4(1.f);
     model = glm::translate(model, mPosition);
     model = glm::scale(model, mSize);
+
     glUniformMatrix4fv(glGetUniformLocation(Shader::ShaderProgram, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
     glBindVertexArray(mVAO);
     glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));

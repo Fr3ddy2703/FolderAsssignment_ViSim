@@ -5,7 +5,7 @@
 
 enum class ECollisionType;
 
-class Cube : Mesh
+class Cube : public Mesh
 {
 public:
 	glm::vec3 mPosition = glm::vec3(1);
