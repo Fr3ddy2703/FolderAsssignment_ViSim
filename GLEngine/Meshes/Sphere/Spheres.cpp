@@ -107,8 +107,10 @@ void Spheres::DrawSphere()
 
 void Spheres::UpdatePos(float _dt)
 {
+    mVelocity += mAcceleration * _dt;
 	mPosition += mVelocity * _dt;
 	mCollider.UpdatePosition(mPosition);
+    mAcceleration = glm::vec3(0);
 }
 
 void Spheres::AddCollider(glm::vec3 _scale, ECollisionType _collisionType, glm::vec3 _offset)

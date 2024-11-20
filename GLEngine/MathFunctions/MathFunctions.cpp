@@ -99,19 +99,28 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 }
 
 
-float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3 _p3,  glm::vec3 _barycode)
+float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3,  glm::vec3 _barycode)
 {
 	return(_p1.y * _barycode.x + _p2.y * _barycode.y + _p3.y * _barycode.z);
 }
 
-bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& height)
+glm::vec3 Barycentric::GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3)
 {
-	static int counter = 0;
-	static int counter2 = 0;
+	glm::vec3 p12 = _p2 - _p1;
+	glm::vec3 p13 = _p3 - _p1;
+
+	glm::vec3 n123 = glm::cross(p12, p13);
+
+	glm::vec3 normalizedN = glm::normalize(n123);
+	normalizedN *= glm::vec3(-1.f);
+	return normalizedN;
+
+}
+
+bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal)
+{
 	for (auto Triangle : _surface.mIndices)
 	{
-		counter++;
-		bool test = false;
 		glm::vec3 barycord = Getbarrycord(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, _object.mPosition);
 
 		if (barycord.x == 0 &&
@@ -119,22 +128,23 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& height)
 			barycord.z == 0)
 		{
 			_object.mPosition = _object.GetPosition() + glm::vec3(0.1, 0, 0.1);
-			BarycentricCord(_object, _surface, height);
+			BarycentricCord(_object, _surface, _height, _normal);
 		}
 		if (barycord.x > 0 && barycord.x < 1 && 
 			barycord.y > 0 && barycord.y < 1 &&
 			barycord.z > 0 && barycord.z < 1)
 		{
-			counter2++;
-			height = GetHeight(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, barycord);
-			std::cout << height << std::endl;
-			height += 2;
+			_height = GetHeight(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, barycord);
+			_height += 1.30;
 
+			_normal = GetNormal(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition);
 			return true;
 		}
 	}
 	return false;
 }
+
+
 
 glm::vec3 Barycentric::Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint)
 {
