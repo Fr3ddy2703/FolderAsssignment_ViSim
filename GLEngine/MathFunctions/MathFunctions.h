@@ -21,8 +21,6 @@ class BSpline
 public:
 
 	/* Public variables */
-
-
 	static glm::vec3 evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, 
 		const  std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints);
 
@@ -40,8 +38,9 @@ class Barycentric : public MathFunctions, public Cube
 {
 public:
 
-	float GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3 _p3, glm::vec3 _barycode);
-	bool BarycentricCord(Spheres _object, Cube _surface, float& height);
-	
+	float GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3, glm::vec3 _barycode);
+	bool BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal);
+	glm::vec3 GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3);
+
 	glm::vec3 Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint);
 };

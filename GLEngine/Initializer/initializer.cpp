@@ -60,6 +60,7 @@ void initializer::Create()
 	mPCloud->mIndices;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	/*Folder exam task 1.3 */
 	glm::vec3 minVertices = glm::vec3(0);
 	glm::vec3 maxVertices = glm::vec3(0);
@@ -155,6 +156,7 @@ void initializer::Create()
 			index.push_back(Triangle(topLeft, bottomRight, topRight));
 		}
 	}
+
 	/* Calculations for normals */
 	for (const Triangle& triangle : index)
     {
@@ -169,7 +171,7 @@ void initializer::Create()
 	mSurface.CreateSurfaceFromPointCLoud(vertices, index);
 
 	Spheres Sphere;
-	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	Sphere.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
 	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
 
 
@@ -198,6 +200,7 @@ void initializer::Run()
 	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(mWindow))
 	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		const auto CurrentFrame = static_cast<float>(glfwGetTime());
 		mDeltaTime = CurrentFrame - FirstFrame;
 		FirstFrame = CurrentFrame;
@@ -206,13 +209,15 @@ void initializer::Run()
 		for (Spheres& ball : mBalls)
 		{
 			float ballheight = ball.mPosition.y;
-			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight))
+			glm::vec3 faceNormal = glm::vec3(0);
+			ball.mAcceleration = glm::vec3(0, -9.81, 0);
+			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal))
 			{
-
+				ball.mVelocity.y = 0;
 				ball.mPosition.y = ballheight;
+				glm::vec3 faceAcceleration = -0.981f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
+				ball.mAcceleration += faceAcceleration;
 			}
-			ball.mVelocity = glm::vec3(-0.1F, 0, 0);
-			ball.mPosition += ball.mVelocity * mDeltaTime; 
 		}
 		
 		glClearColor(color.x, color.y, color.z, 1.f);
@@ -255,6 +260,11 @@ void initializer::Update(float _deltaTime)
 		collision.bounceBack(mEnemy, mPlayer, 1.f);
 	}
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
+
+	for (auto& ball : mBalls)
+	{
+		ball.UpdatePos(_deltaTime);
+	}
 
 	//player->takeDamage();
 }

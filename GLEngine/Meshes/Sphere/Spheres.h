@@ -12,6 +12,7 @@ public:
 	float mMass = 0.f;
 	glm::vec3 mColor = Color::Gold;
 	glm::vec3 mVelocity = glm::vec3(1.f, 0.f, 0.f);
+	glm::vec3 mAcceleration = glm::vec3 (0);
 
 	Spheres() = default;
 	~Spheres() = default;
