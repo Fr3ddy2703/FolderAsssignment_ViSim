@@ -134,10 +134,17 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 			barycord.y > 0 && barycord.y < 1 &&
 			barycord.z > 0 && barycord.z < 1)
 		{
-			_height = GetHeight(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, barycord);
-			_height += 1.30;
+			_height = GetHeight(
+				_surface.mVertices[Triangle.mIndex1].mPosition, 
+				_surface.mVertices[Triangle.mIndex2].mPosition, 
+				_surface.mVertices[Triangle.mIndex3].mPosition, 
+				barycord);
+			_height += 1.f;
 
-			_normal = GetNormal(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition);
+			_normal = GetNormal(
+				_surface.mVertices[Triangle.mIndex1].mPosition, 
+				_surface.mVertices[Triangle.mIndex2].mPosition, 
+				_surface.mVertices[Triangle.mIndex3].mPosition);
 			return true;
 		}
 	}
@@ -174,7 +181,7 @@ glm::vec3 Barycentric::Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3,
 
 	float subtriangle2 = subn3.y;
 
-	float subtriangle3 = subn1.y;
+	float subtriangle3 = subn1.y; 
 
 	barcoords.x = subtriangle1 / area123; 
 	barcoords.y = subtriangle2 / area123; 

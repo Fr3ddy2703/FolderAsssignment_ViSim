@@ -63,10 +63,11 @@ void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
 }
 
 /* Creation of Surface based on the point cloud */
-void Cube::CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices)
+void Cube::CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices, glm::vec3 _size)
 {
 	mVertices = _vertices;
     mIndices = _indices;
+    mSize = _size;
     BindBuffer();
 }
 
@@ -88,7 +89,7 @@ void Cube::AddCollider(glm::vec3 _scale, ECollisionType _collisionType, glm::vec
 
 void Cube::Draw()
 {
-    //glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+   
 	glm::mat4 model = glm::mat4(1.f);
     model = glm::translate(model, mPosition);
     model = glm::scale(model, mSize);
@@ -96,7 +97,6 @@ void Cube::Draw()
     glBindVertexArray(mVAO);
     glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
     glBindVertexArray(0);
-	/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
 }
 
 void Cube::BindBuffer()

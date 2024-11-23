@@ -117,7 +117,7 @@ void initializer::Create()
 			int heightCount = 0;
 
 			/* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
-			float thresholdDistance = 0.1f;
+			float thresholdDistance = 0.01f;
 
 			for (const Vertex& vert : mPCloud->mVertices)
 			{
@@ -168,12 +168,11 @@ void initializer::Create()
     }
 	
 
-	mSurface.CreateSurfaceFromPointCLoud(vertices, index);
+	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(10));
 
 	Spheres Sphere;
-	Sphere.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.25f, 0.75f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 100.f, 2.5f), 1.f,glm::vec3(-1.f, 0.f, 0.f),Color::Gold);
 	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
-
 
 
 	///* Creating the balls */
@@ -196,11 +195,10 @@ void initializer::Run()
 	Create();
  	float FirstFrame = 0.0f;
 	glm::vec3 color(Color::Grey);
-
-	glEnable(GL_DEPTH_TEST);
+	
 	while (!glfwWindowShouldClose(mWindow))
 	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glEnable(GL_DEPTH_TEST);
 		const auto CurrentFrame = static_cast<float>(glfwGetTime());
 		mDeltaTime = CurrentFrame - FirstFrame;
 		FirstFrame = CurrentFrame;
@@ -208,15 +206,16 @@ void initializer::Run()
 		Barycentric mBarycentric;
 		for (Spheres& ball : mBalls)
 		{
-			float ballheight = ball.mPosition.y;
+			float ballheight = 0.f;
 			glm::vec3 faceNormal = glm::vec3(0);
 			ball.mAcceleration = glm::vec3(0, -9.81, 0);
 			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal))
 			{
 				ball.mVelocity.y = 0;
+				glm::vec3 faceAcceleration = 9.81f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
+				ball.mAcceleration = faceAcceleration;
 				ball.mPosition.y = ballheight;
-				glm::vec3 faceAcceleration = -0.981f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
-				ball.mAcceleration += faceAcceleration;
+
 			}
 		}
 		
@@ -263,6 +262,13 @@ void initializer::Update(float _deltaTime)
 
 	for (auto& ball : mBalls)
 	{
+
+		//if(collision.checkBallBallCollision(ball, ball, ECollisionType::ball))
+		//{
+		//	
+		//}
+		//ball.UpdatePos(_deltaTime);
+		//ball.UpdatePos(_deltaTime);
 		ball.UpdatePos(_deltaTime);
 	}
 

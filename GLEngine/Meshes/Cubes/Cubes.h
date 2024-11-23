@@ -8,7 +8,7 @@ enum class ECollisionType;
 class Cube : public Mesh
 {
 public:
-	glm::vec3 mPosition = glm::vec3(1);
+	glm::vec3 mPosition = glm::vec3(0);
 	glm::vec3 mSize = glm::vec3(1);
 
 
@@ -18,7 +18,7 @@ public:
 	
 	void Draw();
 	void CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color);
-	void CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices);
+	void CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices, glm::vec3 _size);
 	void AddCollider(glm::vec3 _scale,ECollisionType _collisionType, glm::vec3 _offset = glm::vec3(0.f));
 
 	void BindBuffer();

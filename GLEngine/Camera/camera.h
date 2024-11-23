@@ -15,6 +15,9 @@ public:
 	glm::vec3 mPCamerPos = glm::vec3(mPlayerPos) + mCameraFront;
 	glm::vec3 mCameraPos = glm::vec3(10.f, 3.f, 5.f) + mCameraFront * -3.f;
     float mCameraSpeed = 3.f;
+    float mMaxSpeed = 50.0f;
+	float mMinSpeed = 0.1f; // Prevent negative or zero speeds
+	float mDefaultSpeed = 1.0f;
 
 
     int mViewLoc;

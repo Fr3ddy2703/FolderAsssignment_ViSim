@@ -18,7 +18,7 @@ glm::mat4 camera::getView()
 glm::mat4 camera::getProjection(float _width, float _height)
 {
     glm::mat4 proj = glm::mat4(1.f);
-    proj = glm::perspective(glm::radians(45.0f), _width / _height, 0.1f, 100.0f);
+    proj = glm::perspective(glm::radians(45.0f), _width / _height, 0.1f, 1000.0f);
     return proj;
 }
 

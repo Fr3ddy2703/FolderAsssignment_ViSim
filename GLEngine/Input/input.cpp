@@ -13,26 +13,45 @@ void KeyBoardInput::processInput(GLFWwindow* _window, std::shared_ptr<Player> _p
     {
         glfwSetWindowShouldClose(_window, true);
     }
-if(glfwGetKey(_window, GLFW_KEY_W)==GLFW_PRESS)
+	if(glfwGetKey(_window, GLFW_KEY_W)==GLFW_PRESS)
 	{
-			initializer::mUseCamera.mCameraPos.x += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.x * initializer::mDeltaTime;
-			initializer::mUseCamera.mCameraPos.y += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.y * initializer::mDeltaTime;
-			initializer::mUseCamera.mCameraPos.z += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.z * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.x += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.x * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.y += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.y * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.z += initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.z * initializer::mDeltaTime;
 	}
 	if(glfwGetKey(_window, GLFW_KEY_S)==GLFW_PRESS)
 	{
-			initializer::mUseCamera.mCameraPos.x -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.x * initializer::mDeltaTime;
-			initializer::mUseCamera.mCameraPos.y -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.y * initializer::mDeltaTime;
-			initializer::mUseCamera.mCameraPos.z -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.z * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.x -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.x * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.y -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.y * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos.z -= initializer::mUseCamera.mCameraSpeed * initializer::mUseCamera.mCameraFront.z * initializer::mDeltaTime;
 	}
 	if(glfwGetKey(_window, GLFW_KEY_A)==GLFW_PRESS)
 	{
-			initializer::mUseCamera.mCameraPos -= (initializer::mUseCamera.mCameraSpeed * glm::normalize(glm::cross(initializer::mUseCamera.mCameraFront, initializer::mUseCamera.mCameraUp))) * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos -= (initializer::mUseCamera.mCameraSpeed * glm::normalize(glm::cross(initializer::mUseCamera.mCameraFront, initializer::mUseCamera.mCameraUp))) * initializer::mDeltaTime;
 	}
 	if(glfwGetKey(_window, GLFW_KEY_D)==GLFW_PRESS)
 	{
-			initializer::mUseCamera.mCameraPos += (initializer::mUseCamera.mCameraSpeed * glm::normalize(glm::cross(initializer::mUseCamera.mCameraFront, initializer::mUseCamera.mCameraUp))) * initializer::mDeltaTime;
+		initializer::mUseCamera.mCameraPos += (initializer::mUseCamera.mCameraSpeed * glm::normalize(glm::cross(initializer::mUseCamera.mCameraFront, initializer::mUseCamera.mCameraUp))) * initializer::mDeltaTime;
 	}
+
+
+	if (glfwGetKey(_window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS)
+	{
+		initializer::mUseCamera.mCameraSpeed = glm::clamp(initializer::mUseCamera.mCameraSpeed + 1.0f, initializer::mUseCamera.mMinSpeed, initializer::mUseCamera.mMaxSpeed);
+	}
+
+	if (glfwGetKey(_window, GLFW_KEY_R) == GLFW_PRESS)
+	{
+		initializer::mUseCamera.mCameraSpeed = initializer::mUseCamera.mDefaultSpeed;
+	}
+	if (glfwGetKey(_window, GLFW_KEY_TAB) == GLFW_PRESS)
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	}
+	else
+	{
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	};
 }
 
 namespace MouseInput
