@@ -168,24 +168,18 @@ void initializer::Create()
     }
 	
 
-	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(10));
+	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(20));
 
 	Spheres Sphere;
-	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 100.f, 2.5f), 1.f,glm::vec3(-1.f, 0.f, 0.f),Color::Gold);
+	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 100.f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
 	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
 
-
-	///* Creating the balls */
-	//Spheres kule;
-	//kule.CreateSphere(glm::vec3(0.25f),4.f, glm::vec3(15.f, 0.75f, 7.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
-	//kule.AddCollider(kule.GetScale(), ECollisionType::ball);
-	
 	mCubes.emplace_back(mFloor);
 	mCubes.emplace_back(mWall);
 	mCubes.emplace_back(mWall2);
 	mCubes.emplace_back(mWall3);
 	mCubes.emplace_back(mWall4);
-	//mBalls.push_back(kule);
+	mBalls.push_back(mKule);
 	mBalls.push_back(Sphere);
 
 }
@@ -202,9 +196,24 @@ void initializer::Run()
 		const auto CurrentFrame = static_cast<float>(glfwGetTime());
 		mDeltaTime = CurrentFrame - FirstFrame;
 		FirstFrame = CurrentFrame;
+		const float spawnCooldown = 0.5f;
+		static float lastSpawnTime = 0.0f;
+
+		if (glfwGetKey(mWindow, GLFW_KEY_E) == GLFW_PRESS)
+		{
+			float currentTime = glfwGetTime();
+			if (currentTime - lastSpawnTime >= spawnCooldown)
+			{
+				Spheres newBall;
+				newBall.CreateSphere(glm::vec3(1.f), 4.f, mUseCamera.mCameraPos + mUseCamera.mCameraFront,1.f, glm::vec3(-1.f, 0.f, 0.f), Color::Gold);
+				mBalls.push_back(newBall);
+				lastSpawnTime = currentTime;
+			}
+		}
+
 
 		Barycentric mBarycentric;
-		for (Spheres& ball : mBalls)
+		for (auto& ball : mBalls)
 		{
 			float ballheight = 0.f;
 			glm::vec3 faceNormal = glm::vec3(0);
@@ -215,7 +224,6 @@ void initializer::Run()
 				glm::vec3 faceAcceleration = 9.81f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
 				ball.mAcceleration = faceAcceleration;
 				ball.mPosition.y = ballheight;
-
 			}
 		}
 		

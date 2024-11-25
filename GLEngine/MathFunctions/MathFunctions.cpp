@@ -98,7 +98,7 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 	}
 }
 
-
+/* Getting height from the objects */
 float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3,  glm::vec3 _barycode)
 {
 	return(_p1.y * _barycode.x + _p2.y * _barycode.y + _p3.y * _barycode.z);
@@ -121,7 +121,12 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 {
 	for (auto Triangle : _surface.mIndices)
 	{
-		glm::vec3 barycord = Getbarrycord(_surface.mVertices[Triangle.mIndex1].mPosition, _surface.mVertices[Triangle.mIndex2].mPosition, _surface.mVertices[Triangle.mIndex3].mPosition, _object.mPosition);
+		/*  */
+		glm::vec3 barycord = Getbarycord(
+			_surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize,
+			_surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize, 
+			_surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize, 
+			_object.mPosition);
 
 		if (barycord.x == 0 &&
 			barycord.y == 0 &&
@@ -134,13 +139,14 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 			barycord.y > 0 && barycord.y < 1 &&
 			barycord.z > 0 && barycord.z < 1)
 		{
-			_height = GetHeight(
-				_surface.mVertices[Triangle.mIndex1].mPosition, 
-				_surface.mVertices[Triangle.mIndex2].mPosition, 
-				_surface.mVertices[Triangle.mIndex3].mPosition, 
-				barycord);
+			/* Calculating each triangles height position scaled with the size */
+			glm::vec3 scaledPosition1 = _surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize;
+			glm::vec3 scaledPosition2 = _surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize;
+			glm::vec3 scaledPosition3 = _surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize;
+			_height = GetHeight(scaledPosition1, scaledPosition2, scaledPosition3, barycord);
 			_height += 1.f;
 
+			/* Calculation of normals */
 			_normal = GetNormal(
 				_surface.mVertices[Triangle.mIndex1].mPosition, 
 				_surface.mVertices[Triangle.mIndex2].mPosition, 
@@ -152,8 +158,8 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 }
 
 
-
-glm::vec3 Barycentric::Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint)
+/* Calculation for the barysentric coordinates */
+glm::vec3 Barycentric::Getbarycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint)
 {
 	_p1.y = 0;
 	_p2.y = 0;

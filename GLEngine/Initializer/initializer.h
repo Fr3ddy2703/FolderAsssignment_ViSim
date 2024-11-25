@@ -24,6 +24,7 @@ public:
 	Cube mWall3;
 	Cube mWall4;
 	Cube mSurface;
+	Spheres mKule;
 
 	/* Degrees for the Bi-Quadratic */
 	int mDu = 2;

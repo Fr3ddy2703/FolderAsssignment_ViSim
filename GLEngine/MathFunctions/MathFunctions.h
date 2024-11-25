@@ -42,5 +42,5 @@ public:
 	bool BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal);
 	glm::vec3 GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3);
 
-	glm::vec3 Getbarrycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint);
+	glm::vec3 Getbarycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint);
 };

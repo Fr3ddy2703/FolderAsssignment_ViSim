@@ -51,7 +51,7 @@ void KeyBoardInput::processInput(GLFWwindow* _window, std::shared_ptr<Player> _p
 	else
 	{
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	};
+	}
 }
 
 namespace MouseInput
