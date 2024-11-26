@@ -95,7 +95,7 @@ void initializer::Create()
 	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
-	int resolution = 10;
+	int resolution = 100;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
 	float distcapX = distX / resolution;
@@ -121,11 +121,11 @@ void initializer::Create()
 
 			for (const Vertex& vert : mPCloud->mVertices)
 			{
-				float distance = glm::distance(glm::vec2(gridPos.x, gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
+				float distance = glm::distance(glm::vec2(gridPos.x,  gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
 
 				if (distance < thresholdDistance)
 				{
-					heightSum += vert.mPosition.y;
+					heightSum -= vert.mPosition.y;
 					heightCount++;
 				}
 			}
@@ -250,7 +250,7 @@ void initializer::Run()
 		//mEnemy->drawEnemy();
 		//mItem->drawItem();
 		/*mBSplines->Draw();*/
-		//mPCloud->Draw();
+		/*mPCloud->Draw();*/
 		mSurface.Draw();
 	
 		glfwSwapBuffers(mWindow);
