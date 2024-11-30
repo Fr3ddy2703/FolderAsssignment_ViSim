@@ -95,7 +95,7 @@ void initializer::Create()
 	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
-	int resolution = 100;
+	int resolution = 10;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
 	float distcapX = distX / resolution;
@@ -168,19 +168,23 @@ void initializer::Create()
     }
 	
 
-	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(20));
+	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(40));
 
-	Spheres Sphere;
-	Sphere.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(15.25f, 100.f, 2.5f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
-	Sphere.AddCollider(Sphere.GetScale(), ECollisionType::ball);
+	Spheres ball1;
+	ball1.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(100.f, 20.f, 150.f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	ball1.AddCollider(ball1.GetScale(), ECollisionType::ball);
+
+	Spheres ball2;
+	ball2.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(120.f, 10.f, 150.f), 0.5f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
+	ball2.AddCollider(ball2.GetScale(), ECollisionType::ball);
 
 	mCubes.emplace_back(mFloor);
 	mCubes.emplace_back(mWall);
 	mCubes.emplace_back(mWall2);
 	mCubes.emplace_back(mWall3);
 	mCubes.emplace_back(mWall4);
-	mBalls.push_back(mKule);
-	mBalls.push_back(Sphere);
+	mBalls.push_back(ball1);
+	mBalls.push_back(ball2);
 
 }
 
@@ -238,10 +242,10 @@ void initializer::Run()
 		glUniformMatrix4fv(mUseCamera.mProjectionLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getProjection(window::mWidth, window::mHeight)));
 		glUniformMatrix4fv(mUseCamera.mViewLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getView()));
 		glUniform3fv(glGetUniformLocation(Shader::ShaderProgram, "viewPos"), 1, glm::value_ptr(mUseCamera.mCameraPos));
-		//for (auto& cube : mCubes)
-		//{
-		//	cube.Draw();
-		//}
+		for (auto& cube : mCubes)
+		{
+			cube.Draw();
+		}
 		for (auto& sphere : mBalls)
 		{
 			sphere.DrawSphere();
@@ -270,15 +274,12 @@ void initializer::Update(float _deltaTime)
 
 	for (auto& ball : mBalls)
 	{
-
-		//if(collision.checkBallBallCollision(ball, ball, ECollisionType::ball))
-		//{
-		//	
-		//}
-		//ball.UpdatePos(_deltaTime);
-		//ball.UpdatePos(_deltaTime);
+		if(collision.checkBallBallCollision(mBalls[0], mBalls[1], ECollisionType::ball))
+		{
+			
+		}
+		mBalls[0].UpdatePos(_deltaTime);
+		mBalls[1].UpdatePos(_deltaTime);
 		ball.UpdatePos(_deltaTime);
 	}
-
-	//player->takeDamage();
 }

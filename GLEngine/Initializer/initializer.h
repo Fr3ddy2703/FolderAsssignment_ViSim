@@ -25,6 +25,7 @@ public:
 	Cube mWall4;
 	Cube mSurface;
 	Spheres mKule;
+	Spheres mKule2;
 
 	/* Degrees for the Bi-Quadratic */
 	int mDu = 2;
@@ -52,11 +53,11 @@ public:
 	virtual void Update(float _deltaTime);
 
 	virtual ~initializer() = default;
-
+	std::vector<Spheres> mBalls;
 private:
 	/* private Shared Pointers */
 	std::vector<Cube> mCubes; 
-	std::vector<Spheres> mBalls;
+
 	std::shared_ptr<BSplineSurface> mBSplines;
 	std::shared_ptr<PointCloud> mPCloud;
 	std::shared_ptr<Player> mPlayer;
