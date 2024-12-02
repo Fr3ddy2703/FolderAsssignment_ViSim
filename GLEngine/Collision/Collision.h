@@ -33,7 +33,7 @@ public:
     bool checkBallBoxCollision(Spheres _ball, Cube _wall, ECollisionType _ballType, ECollisionType _wallType);
 	bool checkPlayerItemCollision(std::shared_ptr<Player> _player, std::shared_ptr<Item> _item);
 	bool checkBoxBoxCollision(std::shared_ptr<Player> _player, std::shared_ptr<Enemy> _enemy);
-	bool checkBallBallCollision(Spheres& _ball1, Spheres& ball2, ECollisionType _type);
+	bool checkBallBallCollision(Spheres& _ball1, Spheres& ball2);
     void ballphysics(Spheres& _b1, Spheres& _b2);
 	void enemyAI( std::shared_ptr<Enemy> _enemy, std::shared_ptr<Player> _player, float _speed, float _deltaTime);
 	void bounceBack(std::shared_ptr<Enemy> _enemy, std::shared_ptr<Player> _player, float _bounceDistance);

@@ -71,21 +71,18 @@ bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::share
 
 
 
-bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2, ECollisionType _type)
+bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 {
 	float totald = std::sqrtf(std::powf(_ball2.mPosition.x - _ball1.mPosition.x, 2.f) + std::powf(_ball2.mPosition.y - _ball1.mPosition.y, 2.f) + std::powf(_ball2.mPosition.z - _ball1.mPosition.z, 2.f));
 	float radius = (_ball1.GetScale().x + _ball2.GetScale().x);
-	if (_type == ECollisionType::ball)
-	{
-		if(totald > radius)
+	if(totald > radius)
             return false;
         ballphysics(_ball1, _ball2);
-			std::cout << "Collision detected" << std::endl;
-		std::cout << "Ball1 position: " << _ball1.mPosition.x << " " << _ball1.mPosition.y << " " << _ball1.mPosition.z << std::endl;
-		std::cout << "Ball2 position: " << _ball2.mPosition.x << " " << _ball2.mPosition.y << " " << _ball2.mPosition.z << std::endl;
+		//	std::cout << "Collision detected" << std::endl;
+		//std::cout << "Ball1 position: " << _ball1.mPosition.x << " " << _ball1.mPosition.y << " " << _ball1.mPosition.z << std::endl;
+		//std::cout << "Ball2 position: " << _ball2.mPosition.x << " " << _ball2.mPosition.y << " " << _ball2.mPosition.z << std::endl;
 
 		glm::vec3 ClampedNormal = _ball1.mPosition - _ball2.mPosition;
-		glm::vec3 ClampedNormal2 = _ball2.mPosition - _ball1.mPosition;
         float massv1 = (2 * _ball2.mMass) / (_ball1.mMass + _ball2.mMass);
         float massv2 = (2 * _ball1.mMass) / (_ball1.mMass + _ball2.mMass);
 		float dotv1 = glm::dot(_ball1.mVelocity - _ball2.mVelocity, ClampedNormal);
@@ -100,8 +97,6 @@ bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2, ECollis
 		_ball2.mVelocity = _ball2.mVelocity - tempv2;
 		return true;
 	}
-	return false;
-}
 
 void Collision::ballphysics(Spheres& _b1, Spheres& _b2)
 {

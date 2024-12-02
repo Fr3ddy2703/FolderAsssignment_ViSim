@@ -4,21 +4,7 @@
 #include "../Meshes/Mesh.h"
 #include "../Meshes/Cubes/Cubes.h"
 #include "../Meshes/Sphere/Spheres.h"
-
 #include "glm/glm.hpp"
-
-
-//int MathFunctions::findKnotInterval(float _x)
-//{
-//	int my = n - 1;
-//
-//
-//	return my;
-//}
-//
-//void MathFunctions::deBoorsAlgorithm(float _x)
-//{
-//}
 
 float MathFunctions::calculateNormal(glm::vec3&& vector1, glm::vec3&& vector2)
 {

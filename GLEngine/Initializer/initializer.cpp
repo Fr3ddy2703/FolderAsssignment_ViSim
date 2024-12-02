@@ -170,21 +170,12 @@ void initializer::Create()
 
 	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(40));
 
-	Spheres ball1;
-	ball1.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(100.f, 20.f, 150.f), 1.f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
-	ball1.AddCollider(ball1.GetScale(), ECollisionType::ball);
-
-	Spheres ball2;
-	ball2.CreateSphere(glm::vec3(1.f),4.f, glm::vec3(120.f, 10.f, 150.f), 0.5f,glm::vec3(0.f, 0.f, 0.f),Color::Gold);
-	ball2.AddCollider(ball2.GetScale(), ECollisionType::ball);
 
 	mCubes.emplace_back(mFloor);
 	mCubes.emplace_back(mWall);
 	mCubes.emplace_back(mWall2);
 	mCubes.emplace_back(mWall3);
 	mCubes.emplace_back(mWall4);
-	mBalls.push_back(ball1);
-	mBalls.push_back(ball2);
 
 }
 
@@ -242,10 +233,10 @@ void initializer::Run()
 		glUniformMatrix4fv(mUseCamera.mProjectionLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getProjection(window::mWidth, window::mHeight)));
 		glUniformMatrix4fv(mUseCamera.mViewLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getView()));
 		glUniform3fv(glGetUniformLocation(Shader::ShaderProgram, "viewPos"), 1, glm::value_ptr(mUseCamera.mCameraPos));
-		for (auto& cube : mCubes)
-		{
-			cube.Draw();
-		}
+		//for (auto& cube : mCubes)
+		//{
+		//	cube.Draw();
+		//}
 		for (auto& sphere : mBalls)
 		{
 			sphere.DrawSphere();
@@ -272,14 +263,12 @@ void initializer::Update(float _deltaTime)
 	}
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
 
-	for (auto& ball : mBalls)
-	{
-		if(collision.checkBallBallCollision(mBalls[0], mBalls[1], ECollisionType::ball))
-		{
-			
-		}
-		mBalls[0].UpdatePos(_deltaTime);
-		mBalls[1].UpdatePos(_deltaTime);
-		ball.UpdatePos(_deltaTime);
-	}
+for (int i = 0; i < mBalls.size(); ++i)
+{
+    for (int j = i + 1; j < mBalls.size(); ++j) // Avoid duplicate checks
+    {
+		collision.checkBallBallCollision(mBalls[i], mBalls[j]);
+    }
+    mBalls[i].UpdatePos(_deltaTime);
+}
 }
