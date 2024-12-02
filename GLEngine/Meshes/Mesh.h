@@ -6,7 +6,8 @@ struct Vertex
 	glm::vec3 mPosition = glm::vec3(0.f);
 	glm::vec3 mColor = glm::vec3(0.f);
 	glm::vec3 mNormal = glm::vec3(0.f);
-	Vertex(glm::vec3 _position, glm::vec3 _rgb) : mPosition(_position), mColor(_rgb)
+	float mFriction = 0;
+	Vertex(glm::vec3 _position, glm::vec3 _rgb, float _friction) : mPosition(_position), mColor(_rgb), mFriction(_friction)
 	{}
 };
 

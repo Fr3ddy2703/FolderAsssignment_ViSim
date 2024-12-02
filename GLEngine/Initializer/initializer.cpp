@@ -92,9 +92,11 @@ void initializer::Create()
 		}
 	}
 
+
 	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
+	float friction;
 	int resolution = 10;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
@@ -135,7 +137,7 @@ void initializer::Create()
 				gridPos.y = heightSum / heightCount;
 			}
 
-			vertices.push_back(Vertex(gridPos, Color::Blue));
+			vertices.push_back(Vertex(gridPos, Color::Blue, 0));
 		}
 	}
 
@@ -149,10 +151,10 @@ void initializer::Create()
 			int bottomLeft = topLeft + (resolution + 1);
 			int bottomRight = bottomLeft + 1;
 
-			// First triangle of the square
+			/* First triangle of the square */
 			index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
 
-			// Second triangle of the square
+			/* Second triangle of the square */
 			index.push_back(Triangle(topLeft, bottomRight, topRight));
 		}
 	}
@@ -213,11 +215,12 @@ void initializer::Run()
 			float ballheight = 0.f;
 			glm::vec3 faceNormal = glm::vec3(0);
 			ball.mAcceleration = glm::vec3(0, -9.81, 0);
-			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal))
+			float fric = 1.f;
+			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal, fric))
 			{
 				ball.mVelocity.y = 0;
 				glm::vec3 faceAcceleration = 9.81f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
-				ball.mAcceleration = faceAcceleration;
+				ball.mAcceleration = faceAcceleration * ball.mMass * fric;
 				ball.mPosition.y = ballheight;
 			}
 		}
@@ -263,9 +266,10 @@ void initializer::Update(float _deltaTime)
 	}
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
 
+	/* Collision for all balls */
 for (int i = 0; i < mBalls.size(); ++i)
 {
-    for (int j = i + 1; j < mBalls.size(); ++j) // Avoid duplicate checks
+    for (int j = i + 1; j < mBalls.size(); ++j)
     {
 		collision.checkBallBallCollision(mBalls[i], mBalls[j]);
     }

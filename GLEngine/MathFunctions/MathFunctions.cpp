@@ -84,6 +84,11 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 	}
 }
 
+float Barycentric::getfriction(Vertex& _v1, Vertex& _v2, Vertex& _v3)
+{
+	return (_v1.mFriction + _v2.mFriction + _v3.mFriction) / 3;
+}
+
 /* Getting height from the objects */
 float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3,  glm::vec3 _barycode)
 {
@@ -103,7 +108,7 @@ glm::vec3 Barycentric::GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3)
 
 }
 
-bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal)
+bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal, float& _friction)
 {
 	for (auto Triangle : _surface.mIndices)
 	{
@@ -111,7 +116,7 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 		glm::vec3 barycord = Getbarycord(
 			_surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize,
 			_surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize, 
-			_surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize, 
+		 	_surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize, 
 			_object.mPosition);
 
 		if (barycord.x == 0 &&
@@ -119,26 +124,31 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 			barycord.z == 0)
 		{
 			_object.mPosition = _object.GetPosition() + glm::vec3(0.1, 0, 0.1);
-			BarycentricCord(_object, _surface, _height, _normal);
+			BarycentricCord(_object, _surface, _height, _normal, _friction);
 		}
-		if (barycord.x > 0 && barycord.x < 1 && 
+			if (barycord.x > 0 && barycord.x < 1 && 
 			barycord.y > 0 && barycord.y < 1 &&
 			barycord.z > 0 && barycord.z < 1)
-		{
-			/* Calculating each triangles height position scaled with the size */
-			glm::vec3 scaledPosition1 = _surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize;
-			glm::vec3 scaledPosition2 = _surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize;
-			glm::vec3 scaledPosition3 = _surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize;
-			_height = GetHeight(scaledPosition1, scaledPosition2, scaledPosition3, barycord);
-			_height += 1.f;
+				{
+					/* Calculating each triangles height position scaled with the size */
+					glm::vec3 scaledPosition1 = _surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize;
+					glm::vec3 scaledPosition2 = _surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize;
+					glm::vec3 scaledPosition3 = _surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize;
+					_height = GetHeight(scaledPosition1, scaledPosition2, scaledPosition3, barycord);
+					_height += 1.f;
 
-			/* Calculation of normals */
-			_normal = GetNormal(
-				_surface.mVertices[Triangle.mIndex1].mPosition, 
-				_surface.mVertices[Triangle.mIndex2].mPosition, 
-				_surface.mVertices[Triangle.mIndex3].mPosition);
-			return true;
-		}
+					_friction = getfriction(
+						_surface.mVertices[Triangle.mIndex1],
+						_surface.mVertices[Triangle.mIndex2],
+						_surface.mVertices[Triangle.mIndex3]);
+
+					/* Calculation of normals */
+					_normal = GetNormal(
+						_surface.mVertices[Triangle.mIndex1].mPosition, 
+						_surface.mVertices[Triangle.mIndex2].mPosition, 
+						_surface.mVertices[Triangle.mIndex3].mPosition);
+					return true;
+				}
 	}
 	return false;
 }

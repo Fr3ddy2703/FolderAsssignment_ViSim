@@ -37,10 +37,9 @@ class Barycentric : public MathFunctions, public Cube
 
 {
 public:
-
+	float getfriction(Vertex& _v1, Vertex& _v2, Vertex& _v3);
 	float GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3, glm::vec3 _barycode);
-	bool BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal);
+	bool BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal, float& _friction);
 	glm::vec3 GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3);
-
 	glm::vec3 Getbarycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint);
 };

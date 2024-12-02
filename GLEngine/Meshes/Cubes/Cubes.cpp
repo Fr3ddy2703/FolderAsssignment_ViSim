@@ -8,14 +8,14 @@ void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
     GetPosition() = mPosition;
     GetScale() = mSize;
 
-    Vertex v0{glm::vec3(0.f, 0.f, 0.f), _color}; /* Front-Bot-left */
-    Vertex v1{glm::vec3(1.f, 0.f, 0.f), _color}; /* Front-Bot-right */
-    Vertex v2{glm::vec3(1.f, 1.f, 0.f), _color}; /* Front-Top-right */
-    Vertex v3{glm::vec3(0.f, 1.f, 0.f), _color}; /* Front-Top-left */
-    Vertex v4{glm::vec3(0.f, 0.f, -1.f), _color}; /* Back-Bot-left */
-    Vertex v5{glm::vec3(1.f, 0.f, -1.f), _color}; /* Back-Bot-right */
-    Vertex v6{glm::vec3(1.f, 1.f, -1.f), _color}; /* Back-Top-right */
-    Vertex v7{glm::vec3(0.f, 1.f, -1.f), _color}; /* Back-Top-left */
+    Vertex v0{glm::vec3(0.f, 0.f, 0.f), _color, 0}; /* Front-Bot-left */
+    Vertex v1{glm::vec3(1.f, 0.f, 0.f), _color, 0}; /* Front-Bot-right */
+    Vertex v2{glm::vec3(1.f, 1.f, 0.f), _color, 0}; /* Front-Top-right */
+    Vertex v3{glm::vec3(0.f, 1.f, 0.f), _color, 0}; /* Front-Top-left */
+    Vertex v4{glm::vec3(0.f, 0.f, -1.f), _color, 0}; /* Back-Bot-left */
+    Vertex v5{glm::vec3(1.f, 0.f, -1.f), _color, 0}; /* Back-Bot-right */
+    Vertex v6{glm::vec3(1.f, 1.f, -1.f), _color, 0}; /* Back-Top-right */
+    Vertex v7{glm::vec3(0.f, 1.f, -1.f), _color, 0}; /* Back-Top-left */
 
     mVertices.emplace_back(v0);
     mVertices.emplace_back(v1);
@@ -123,6 +123,9 @@ void Cube::BindBuffer()
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mColor)));
     glEnableVertexAttribArray(2);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mNormal)));
+	glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)(offsetof(Vertex, mFriction)));
+
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);

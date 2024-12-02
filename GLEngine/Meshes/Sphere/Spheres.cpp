@@ -19,12 +19,12 @@ void Spheres::CreateSphere(glm::vec3 _size, float _segment, glm::vec3 _pos, floa
 	mVelocity = _speed;
     mMass = _mass;
 
-    Vertex v0 {glm::vec3(0.f, 0.f, 1.f), _color};
-    Vertex v1 {glm::vec3(1.f, 0.f, 0.f), _color};
-    Vertex v2 {glm::vec3(0.f, 1.f, 0.f), _color};
-    Vertex v3 {glm::vec3(-1.f, 0.f, 0.f), _color};
-    Vertex v4 {glm::vec3(0.f, -1.f, 0.f), _color};
-    Vertex v5 {glm::vec3(0.f, 0.f, -1.f), _color};
+    Vertex v0 {glm::vec3(0.f, 0.f, 1.f), _color, 0};
+    Vertex v1 {glm::vec3(1.f, 0.f, 0.f), _color, 0};
+    Vertex v2 {glm::vec3(0.f, 1.f, 0.f), _color, 0};
+    Vertex v3 {glm::vec3(-1.f, 0.f, 0.f), _color, 0};
+    Vertex v4 {glm::vec3(0.f, -1.f, 0.f), _color, 0};
+    Vertex v5 {glm::vec3(0.f, 0.f, -1.f), _color, 0};
 
 	mVertices.emplace_back(v0);
     mVertices.emplace_back(v1);
@@ -67,9 +67,9 @@ void Spheres::SubDivide(int _index1, int _index2, int _index3, int _n)
 
         int index4 = mVertices.size();
 
-		mVertices.emplace_back(v1, mColor);
-		mVertices.emplace_back(v2, mColor);
-		mVertices.emplace_back(v3, mColor);
+		mVertices.emplace_back(v1, mColor, 0);
+		mVertices.emplace_back(v2, mColor, 0);
+		mVertices.emplace_back(v3, mColor, 0);
 
 		int index5 = index4 + 1;
         int index6 = index4 + 2;
@@ -82,11 +82,11 @@ void Spheres::SubDivide(int _index1, int _index2, int _index3, int _n)
 	else
 	{
         int indice1 = mVertices.size();
-		mVertices.emplace_back(glm::vec3{mVertices[_index1].mPosition}, mColor);
+		mVertices.emplace_back(glm::vec3{mVertices[_index1].mPosition}, mColor, 0);
         int indice2 = mVertices.size();
-		mVertices.emplace_back(glm::vec3{mVertices[_index2].mPosition}, mColor);
+		mVertices.emplace_back(glm::vec3{mVertices[_index2].mPosition}, mColor, 0);
 		int indice3 = mVertices.size();
-		mVertices.emplace_back(glm::vec3{mVertices[_index3].mPosition}, mColor);
+		mVertices.emplace_back(glm::vec3{mVertices[_index3].mPosition}, mColor, 0);
 
         mIndices.emplace_back(indice1, indice2, indice3);
 

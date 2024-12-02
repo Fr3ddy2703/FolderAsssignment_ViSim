@@ -98,6 +98,7 @@ bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 		return true;
 	}
 
+/* Ball physics */
 void Collision::ballphysics(Spheres& _b1, Spheres& _b2)
 {
 	float totalr = std::sqrtf(std::powf(_b2.mPosition.x - _b1.mPosition.x, 2.f) + std::powf(_b2.mPosition.y - _b1.mPosition.y, 2.f) + std::powf(_b2.mPosition.z - _b1.mPosition.z, 2.f));

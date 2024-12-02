@@ -19,7 +19,7 @@ void BSplineSurface::CreateBSplineSurface(int _UResolution, int _VResolution, in
 			glm::vec3 surfacePointNormal = BSpline::evaluateBSplineNormal(u, v, _du, _dv, _UResolution, _VResolution, _uKnot,
 				_vKnot, _controlPoints);
 
-			mVertices.push_back(Vertex(surfacePoint, surfacePointNormal));
+			mVertices.push_back(Vertex(surfacePoint, surfacePointNormal, 0));
         }
     }
     for (int i = 0; i < _UResolution - 1; i++)

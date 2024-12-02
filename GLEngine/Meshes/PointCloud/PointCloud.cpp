@@ -54,7 +54,7 @@ void PointCloud::CreatePointCloudFromFile(const char* _fileDirectory, float _sca
         /* Swapping the y and z coordinates so the terrain will be horizontal and not vertical */
 		glm::vec3 vpos = (glm::vec3(x, z, y) - terrainOffset) * _scaleFactor;
 
-        mVertices.push_back(Vertex(vpos, colorf));
+        mVertices.push_back(Vertex(vpos, colorf, 0));
 
 
         mIndices.push_back(Triangle(mVertices.size() - 1, mVertices.size() - 1, mVertices.size() - 1));
