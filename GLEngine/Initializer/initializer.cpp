@@ -96,7 +96,7 @@ void initializer::Create()
 	/* The surface' variables */
 	std::vector<Vertex> vertices;
 	std::vector<Triangle> index;
-	float friction;
+	float friction = 0.f;
 	int resolution = 10;
 	float distX = maxVertices.x - minVertices.x;
 	float distZ = maxVertices.z - minVertices.z;
@@ -137,7 +137,17 @@ void initializer::Create()
 				gridPos.y = heightSum / heightCount;
 			}
 
-			vertices.push_back(Vertex(gridPos, Color::Blue, 0));
+			glm::vec3 color = glm::vec3(0, 0, 1);
+			if (gridPos.y >= 0 && gridPos.y <= 10)
+			{
+				color = glm::vec3(1, 0,0);
+				friction = 1.f;
+			} else
+			{
+				friction = 0.f;
+			}
+
+			vertices.push_back(Vertex(gridPos, color, friction));
 		}
 	}
 
@@ -202,7 +212,8 @@ void initializer::Run()
 			if (currentTime - lastSpawnTime >= spawnCooldown)
 			{
 				Spheres newBall;
-				newBall.CreateSphere(glm::vec3(1.f), 4.f, mUseCamera.mCameraPos + mUseCamera.mCameraFront,1.f, glm::vec3(-1.f, 0.f, 0.f), Color::Gold);
+				newBall.CreateSphere(glm::vec3(1.f), 4.f, 
+					mUseCamera.mCameraPos + mUseCamera.mCameraFront,1.f, glm::vec3(-1.f, 0.f, 0.f), Color::Gold);
 				mBalls.push_back(newBall);
 				lastSpawnTime = currentTime;
 			}
@@ -215,13 +226,16 @@ void initializer::Run()
 			float ballheight = 0.f;
 			glm::vec3 faceNormal = glm::vec3(0);
 			ball.mAcceleration = glm::vec3(0, -9.81, 0);
-			float fric = 1.f;
-			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal, fric))
+			float friction;
+			if (mBarycentric.BarycentricCord(ball, mSurface, ballheight, faceNormal, friction))
 			{
 				ball.mVelocity.y = 0;
 				glm::vec3 faceAcceleration = 9.81f * glm::vec3(faceNormal.x * faceNormal.y, (faceNormal.y * faceNormal.y) - 1, faceNormal.z * faceNormal.y);
-				ball.mAcceleration = faceAcceleration * ball.mMass * fric;
+				ball.mAcceleration = faceAcceleration;
 				ball.mPosition.y = ballheight;
+
+				glm::vec3 frictionForce = -friction * ball.mVelocity;
+				ball.mAcceleration += frictionForce;
 			}
 		}
 		

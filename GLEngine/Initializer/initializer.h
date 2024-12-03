@@ -54,6 +54,7 @@ public:
 
 	virtual ~initializer() = default;
 	std::vector<Spheres> mBalls;
+
 private:
 	/* private Shared Pointers */
 	std::vector<Cube> mCubes; 

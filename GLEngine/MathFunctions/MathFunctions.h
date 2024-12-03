@@ -24,6 +24,9 @@ public:
 	static glm::vec3 evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, 
 		const  std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints);
 
+	static glm::vec3 evaluateBSplineCurve(float _u, int _du, const std::vector<float>& _uKnot, 
+		 const std::vector<glm::vec3>& _controlPoints);
+
 	static glm::vec3 evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, 
 		const std::vector<float>& _uKnot, const  std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints);
 

@@ -12,7 +12,10 @@ float MathFunctions::calculateNormal(glm::vec3&& vector1, glm::vec3&& vector2)
 }
 
 // Calculation for B-Spline surface
-glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
+glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, 
+	const std::vector<float>& _uKnot, 
+	const std::vector<float>& _vKnot, 
+	const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 surfacePoint(0.0f);
 	int numControlPointsU = _controlPoints.size() - 1;
@@ -36,8 +39,36 @@ glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, 
 	return surfacePoint;
 }
 
+glm::vec3 BSpline::evaluateBSplineCurve(float _u, int _du, const std::vector<float>& _uKnot, const std::vector<glm::vec3>& _controlPoints)
+{
+    int numControlPoints = _controlPoints.size() - 1;
+
+    int span = 0;
+    while (_u >= _uKnot[span + _du + 1] && span < numControlPoints - _du) {
+        span++;
+    }
+
+    /* Evaluate the B-spline basis functions using Cox-de Boor recursion */
+    std::vector<float> basisFunctions(_du + 1);
+    for (int j = 0; j <= _du; ++j) {
+        basisFunctions[j] = CoxDeBoorRecursive(span - _du + j, _du, _u, _uKnot);
+    }
+
+    /* Evaluate the B-spline curve point */
+    glm::vec3 curvePoint(0.0f);
+    for (int j = 0; j <= _du; ++j) {
+           curvePoint += basisFunctions[j] * _controlPoints[span - _du + j];
+    }
+
+    return curvePoint;
+}
+
+
 // Calculation for B-Spline surface normal
-glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
+glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, 
+	const std::vector<float>& _uKnot, 
+	const std::vector<float>& _vKnot, 
+	const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 P = BSpline::evaluateBSplineSurface(_u, _v, _du, _dv, _uKnot, _vKnot,
 		_controlPoints);
@@ -112,7 +143,6 @@ bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height
 {
 	for (auto Triangle : _surface.mIndices)
 	{
-		/*  */
 		glm::vec3 barycord = Getbarycord(
 			_surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize,
 			_surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize, 
