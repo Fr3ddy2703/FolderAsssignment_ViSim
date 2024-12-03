@@ -261,7 +261,8 @@ void initializer::Run()
 		//mPlayer->drawPlayer();
 		//mEnemy->drawEnemy();
 		//mItem->drawItem();
-		/*mBSplines->Draw();*/
+
+		mBSplines->Draw();
 		/*mPCloud->Draw();*/
 		mSurface.Draw();
 	
