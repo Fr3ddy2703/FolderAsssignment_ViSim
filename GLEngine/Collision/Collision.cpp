@@ -73,7 +73,9 @@ bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::share
 
 bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 {
-	float totald = std::sqrtf(std::powf(_ball2.mPosition.x - _ball1.mPosition.x, 2.f) + std::powf(_ball2.mPosition.y - _ball1.mPosition.y, 2.f) + std::powf(_ball2.mPosition.z - _ball1.mPosition.z, 2.f));
+	float totald = std::sqrtf(std::powf(_ball2.mPosition.x - _ball1.mPosition.x, 2.f) + 
+		std::powf(_ball2.mPosition.y - _ball1.mPosition.y, 2.f) + 
+		std::powf(_ball2.mPosition.z - _ball1.mPosition.z, 2.f));
 	float radius = (_ball1.GetScale().x + _ball2.GetScale().x);
 	if(totald > radius)
             return false;
@@ -101,7 +103,9 @@ bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 /* Ball physics */
 void Collision::ballphysics(Spheres& _b1, Spheres& _b2)
 {
-	float totalr = std::sqrtf(std::powf(_b2.mPosition.x - _b1.mPosition.x, 2.f) + std::powf(_b2.mPosition.y - _b1.mPosition.y, 2.f) + std::powf(_b2.mPosition.z - _b1.mPosition.z, 2.f));
+	float totalr = std::sqrtf(std::powf(_b2.mPosition.x - _b1.mPosition.x, 2.f) + 
+		std::powf(_b2.mPosition.y - _b1.mPosition.y, 2.f) + 
+		std::powf(_b2.mPosition.z - _b1.mPosition.z, 2.f));
 	float d = (_b1.GetScale().x + _b2.GetScale().x);
 	glm::vec3 impactNormal = glm::normalize(_b2.mPosition - _b1.mPosition);
     _b1.mPosition = _b1.mPosition + impactNormal * (totalr - d) / 2.f;
