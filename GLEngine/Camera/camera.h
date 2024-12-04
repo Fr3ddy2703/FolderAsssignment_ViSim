@@ -9,28 +9,31 @@ class camera
 {
 public:
 
-    glm::vec3 cameraFront = glm::vec3 (0.0f, 0.0f,-1.0f);
-	glm::vec3 cameraUp = glm::vec3 (0.0f, 1.0f, 0.0f);
-	glm::vec3 PlayerPos = glm::vec3(0.375f, 1.15f, -0.375f);
-	glm::vec3 pCamerPos = glm::vec3(PlayerPos) + cameraFront;
-	glm::vec3 cameraPos = glm::vec3(10.f, 3.f, 5.f) + cameraFront * -3.f;
-    float cameraSpeed = 3.f;
+    glm::vec3 mCameraFront = glm::vec3 (0.0f, 0.0f,-1.0f);
+	glm::vec3 mCameraUp = glm::vec3 (0.0f, 1.0f, 0.0f);
+	glm::vec3 mPlayerPos = glm::vec3(0.375f, 1.15f, -0.375f);
+	glm::vec3 mPCamerPos = glm::vec3(mPlayerPos) + mCameraFront;
+	glm::vec3 mCameraPos = glm::vec3(10.f, 3.f, 5.f) + mCameraFront * -3.f;
+    float mCameraSpeed = 3.f;
+    float mMaxSpeed = 50.0f;
+	float mMinSpeed = 0.1f; // Prevent negative or zero speeds
+	float mDefaultSpeed = 1.0f;
 
 
-    int viewLoc;
-    int projectionLoc;
-    bool CameraLock = false;
-    bool FirstPersCam = false;
+    int mViewLoc;
+    int mProjectionLoc;
+    bool mCameraLock = false;
+    bool mFirstPersCam = false;
     
     void initCamera();
 
-    glm::mat4 view;
-    glm::mat4 projection;
+    glm::mat4 mView;
+    glm::mat4 mProjection;
     
     glm::mat4 getView();
-	glm::mat4 getProjection(float width, float height);
+	glm::mat4 getProjection(float _width, float _height);
     void setPlayerPos(glm::vec3 _position);
-	glm::vec3 orbitCamera(glm::vec3 direction);
+	glm::vec3 orbitCamera(glm::vec3 _direction);
 
     void updatePos(glm::vec3 _newpos);
 };

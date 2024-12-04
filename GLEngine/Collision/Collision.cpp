@@ -3,32 +3,32 @@
 #include "../Initializer/initializer.h"
 
 
-std::vector<std::shared_ptr<Collision>> Collision::AllCollision;
+std::vector<std::shared_ptr<Collision>> Collision::mAllCollision;
 
-Collision::Collision(glm::vec3 position, glm::vec3 scale, glm::vec3 offset, ECollisionType collision_type) : scale(scale), offset(offset), collisionType(collision_type)
+Collision::Collision(glm::vec3 _position, glm::vec3 _scale, glm::vec3 _offset, ECollisionType _collision_type) : mScale(_scale), mOffset(_offset), mCollisionType(_collision_type)
 {
-    min = position;
-    max = position + scale;
-    max.z = position.z - scale.z;
+    mMin = _position;
+    mMax = _position + _scale;
+    mMax.z = _position.z - _scale.z;
 
-    AllCollision.push_back(std::make_shared<Collision>(*this));
+    mAllCollision.push_back(std::make_shared<Collision>(*this));
 }
 
-void Collision::UpdatePosition(glm::vec3 position)
+void Collision::UpdatePosition(glm::vec3 _position)
 {
-    min = position;
-    max = position + scale;
-    max.z = position.z - scale.z;
+    mMin = _position;
+    mMax = _position + mScale;
+    mMax.z = _position.z - mScale.z;
 }
 
-bool Collision::checkBallBoxCollision(Spheres ball, Cube wall, ECollisionType ballType, ECollisionType wallType)
+bool Collision::checkBallBoxCollision(Spheres _ball, Cube _wall, ECollisionType _ballType, ECollisionType _wallType)
 {
-    if (ballType == ECollisionType::ball && wallType == ECollisionType::Boxes)
+    if (_ballType == ECollisionType::ball && _wallType == ECollisionType::Boxes)
     {
-        if (((wall.position.x <= ball.position.x + ball.size.x) && 
-             (wall.position.x >= ball.position.x - ball.size.x)) ||
-            ((wall.position.z - wall.size.z <= ball.position.z + ball.size.z) && 
-             (wall.position.z >= ball.position.z - ball.size.z)))
+        if (((_wall.mPosition.x <= _ball.mPosition.x + _ball.mSize.x) && 
+             (_wall.mPosition.x >= _ball.mPosition.x - _ball.mSize.x)) ||
+            ((_wall.mPosition.z - _wall.mSize.z <= _ball.mPosition.z + _ball.mSize.z) && 
+             (_wall.mPosition.z >= _ball.mPosition.z - _ball.mSize.z)))
         {
           
              std::cout << "Collision detected" << "\n";
@@ -40,10 +40,10 @@ bool Collision::checkBallBoxCollision(Spheres ball, Cube wall, ECollisionType ba
 
 bool Collision::checkPlayerItemCollision(std::shared_ptr<Player> _player, std::shared_ptr<Item> _item)
 {
-	if (((_player->position.x <= _item->position.x + _item->size.x) &&
-             (_player->position.x >= _item->position.x - _item->size.x)) ||
-            ((_player->position.z - _player->size.z <= _item->position.z + _item->size.z) &&
-             (_player->position.z >= _item->position.z - _item->size.z))){
+	if (((_player->mPosition.x <= _item->mPosition.x + _item->mSize.x) &&
+             (_player->mPosition.x >= _item->mPosition.x - _item->mSize.x)) ||
+            ((_player->mPosition.z - _player->mSize.z <= _item->mPosition.z + _item->mSize.z) &&
+             (_player->mPosition.z >= _item->mPosition.z - _item->mSize.z))){
 		{
           
              //std::cout << "Collision detected" << "\n";
@@ -57,10 +57,10 @@ bool Collision::checkPlayerItemCollision(std::shared_ptr<Player> _player, std::s
 bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::shared_ptr<Enemy> _enemy)
 {
 
-		if (((_player->position.x <= _enemy->position.x + _enemy->size.x) &&
-			(_player->position.x >= _enemy->position.x - _enemy->size.x)) &&
-			((_player->position.z - _player->size.z <= _enemy->position.z + _enemy->size.z) &&
-				(_player->position.z >= _enemy->position.z - _enemy->size.z)))
+		if (((_player->mPosition.x <= _enemy->mPosition.x + _enemy->mSize.x) &&
+			(_player->mPosition.x >= _enemy->mPosition.x - _enemy->mSize.x)) &&
+			((_player->mPosition.z - _player->mSize.z <= _enemy->mPosition.z + _enemy->mSize.z) &&
+				(_player->mPosition.z >= _enemy->mPosition.z - _enemy->mSize.z)))
 		{
 			//std::cout << "Collision detected" << "\n";
 			return true;
@@ -71,58 +71,58 @@ bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::share
 
 
 
-bool Collision::checkBallBallCollision(Spheres& ball1, Spheres& ball2, ECollisionType type)
+bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 {
-	float totald = std::sqrtf(std::powf(ball2.position.x - ball1.position.x, 2.f) + std::powf(ball2.position.y - ball1.position.y, 2.f) + std::powf(ball2.position.z - ball1.position.z, 2.f));
-	float radius = (ball1.GetScale().x + ball2.GetScale().x);
-	if (type == ECollisionType::ball)
-	{
-		if(totald > radius)
+	float totald = std::sqrtf(std::powf(_ball2.mPosition.x - _ball1.mPosition.x, 2.f) + 
+		std::powf(_ball2.mPosition.y - _ball1.mPosition.y, 2.f) + 
+		std::powf(_ball2.mPosition.z - _ball1.mPosition.z, 2.f));
+	float radius = (_ball1.GetScale().x + _ball2.GetScale().x);
+	if(totald > radius)
             return false;
-        ballphysics(ball1, ball2);
-			std::cout << "Collision detected" << std::endl;
-		std::cout << "Ball1 position: " << ball1.position.x << " " << ball1.position.y << " " << ball1.position.z << std::endl;
-		std::cout << "Ball2 position: " << ball2.position.x << " " << ball2.position.y << " " << ball2.position.z << std::endl;
+        ballphysics(_ball1, _ball2);
+		//	std::cout << "Collision detected" << std::endl;
+		//std::cout << "Ball1 position: " << _ball1.mPosition.x << " " << _ball1.mPosition.y << " " << _ball1.mPosition.z << std::endl;
+		//std::cout << "Ball2 position: " << _ball2.mPosition.x << " " << _ball2.mPosition.y << " " << _ball2.mPosition.z << std::endl;
 
-		glm::vec3 ClampedNormal = ball1.position - ball2.position;
-		glm::vec3 ClampedNormal2 = ball2.position - ball1.position;
-        float massv1 = (2 * ball2.m) / (ball1.m + ball2.m);
-        float massv2 = (2 * ball1.m) / (ball1.m + ball2.m);
-		float dotv1 = glm::dot(ball1.velocity - ball2.velocity, ClampedNormal);
+		glm::vec3 ClampedNormal = _ball1.mPosition - _ball2.mPosition;
+        float massv1 = (2 * _ball2.mMass) / (_ball1.mMass + _ball2.mMass);
+        float massv2 = (2 * _ball1.mMass) / (_ball1.mMass + _ball2.mMass);
+		float dotv1 = glm::dot(_ball1.mVelocity - _ball2.mVelocity, ClampedNormal);
 		float magnitudev1 = sqrt(pow(ClampedNormal.x, 2) + pow(ClampedNormal.y, 2) + pow(ClampedNormal.z, 2));
 		dotv1 /= magnitudev1;
-		float dotv2 = glm::dot(ball2.velocity - ball1.velocity, -ClampedNormal);
+		float dotv2 = glm::dot(_ball2.mVelocity - _ball1.mVelocity, -ClampedNormal);
 		float magnitudev2 = sqrt(pow(-ClampedNormal.x, 2) + pow(-ClampedNormal.y, 2) + pow(-ClampedNormal.z, 2));
 		dotv2 /= magnitudev2;
         glm::vec3 tempv1 = massv1 * dotv1 * ClampedNormal;
 		glm::vec3 tempv2 = massv2 * dotv2 * -ClampedNormal;
-		ball1.velocity = ball1.velocity - tempv1;
-		ball2.velocity = ball2.velocity - tempv2;
+		_ball1.mVelocity = _ball1.mVelocity - tempv1;
+		_ball2.mVelocity = _ball2.mVelocity - tempv2;
 		return true;
 	}
-	return false;
-}
 
-void Collision::ballphysics(Spheres& b1, Spheres& b2)
+/* Ball physics */
+void Collision::ballphysics(Spheres& _b1, Spheres& _b2)
 {
-	float totalr = std::sqrtf(std::powf(b2.position.x - b1.position.x, 2.f) + std::powf(b2.position.y - b1.position.y, 2.f) + std::powf(b2.position.z - b1.position.z, 2.f));
-	float d = (b1.GetScale().x + b2.GetScale().x);
-	glm::vec3 impactNormal = glm::normalize(b2.position - b1.position);
-    b1.position = b1.position + impactNormal * (totalr - d) / 2.f;
-    b2.position = b2.position - impactNormal * (totalr - d) / 2.f;
+	float totalr = std::sqrtf(std::powf(_b2.mPosition.x - _b1.mPosition.x, 2.f) + 
+		std::powf(_b2.mPosition.y - _b1.mPosition.y, 2.f) + 
+		std::powf(_b2.mPosition.z - _b1.mPosition.z, 2.f));
+	float d = (_b1.GetScale().x + _b2.GetScale().x);
+	glm::vec3 impactNormal = glm::normalize(_b2.mPosition - _b1.mPosition);
+    _b1.mPosition = _b1.mPosition + impactNormal * (totalr - d) / 2.f;
+    _b2.mPosition = _b2.mPosition - impactNormal * (totalr - d) / 2.f;
 }
 
 void Collision::enemyAI(std::shared_ptr<Enemy> _enemy, std::shared_ptr<Player> _player, float _speed, float _deltaTime)
 {
-	glm::vec3 direction = _player->position - _enemy->position;
+	glm::vec3 direction = _player->mPosition - _enemy->mPosition;
 	direction = glm::normalize(direction);
-	_enemy->position += direction * _speed * _deltaTime;
+	_enemy->mPosition += direction * _speed * _deltaTime;
 }
 
 void Collision::bounceBack(std::shared_ptr<Enemy> _enemy, std::shared_ptr<Player> _player, float _bounceDistance)
 {
-	glm::vec3 direction = _player->position - _enemy->position;
+	glm::vec3 direction = _player->mPosition - _enemy->mPosition;
 	direction = glm::normalize(direction);
-	_enemy->position -= direction * _bounceDistance;
+	_enemy->mPosition -= direction * _bounceDistance;
 }
 

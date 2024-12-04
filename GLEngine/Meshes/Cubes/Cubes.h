@@ -5,32 +5,28 @@
 
 enum class ECollisionType;
 
-class Cube : Mesh
+class Cube : public Mesh
 {
 public:
-	std::vector<Vertex> mVertices;
-	std::vector<Triangle> mIndices;
-	glm::vec3 position = glm::vec3(1);
-	glm::vec3 size = glm::vec3(1);
+	glm::vec3 mPosition = glm::vec3(0);
+	glm::vec3 mSize = glm::vec3(1);
 
 
-	Collision Collider;
+	Collision mCollider;
 	glm::vec3& GetPosition();
 	glm::vec3& GetScale();
 	
 	void Draw();
-	//void DrawBoundingBox(unsigned int shaderProgram);
-	void CreateCube(glm::vec3 size, glm::vec3 pos, glm::vec3 color);
-	void AddCollider(glm::vec3 scale,ECollisionType collisionType, glm::vec3 offset = glm::vec3(0.f));
+	void CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color);
+	void CreateSurfaceFromPointCLoud(std::vector<Vertex> _vertices, std::vector<Triangle> _indices, glm::vec3 _size);
+	void AddCollider(glm::vec3 _scale,ECollisionType _collisionType, glm::vec3 _offset = glm::vec3(0.f));
 
 	void BindBuffer();
 
-	
-
 private:
-	unsigned int VBO;
-	unsigned int EBO;
-	unsigned int VAO;
+	unsigned int mVBO;
+	unsigned int mEBO;
+	unsigned int mVAO;
 
 };
 

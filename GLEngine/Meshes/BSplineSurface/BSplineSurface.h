@@ -4,8 +4,6 @@
 class BSplineSurface : public Mesh
 {
 public:
-	//std::vector<Vertex> mVertices;
-	//std::vector<Triangle> mIndices;
 
 	BSplineSurface(){};
 
@@ -14,15 +12,12 @@ public:
 	const std::vector<std::vector<glm::vec3>>& _controlPoints);
 
 	void Draw();
+
 	void BindBuffer();
 
-	
-
 private:
-	unsigned int VBO;
-	unsigned int EBO;
-	unsigned int VAO;
-
-
+	unsigned int mVBO;
+	unsigned int mEBO;
+	unsigned int mVAO;
 };
 

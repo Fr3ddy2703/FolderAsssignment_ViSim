@@ -4,8 +4,8 @@
 
 #include "../Shaders/shader.h"
 
-float window::width = 1920.f;
-float window::height = 1080.f;
+float window::mWidth = 1920.f;
+float window::mHeight = 1080.f;
 
 GLFWwindow* window::initWindow()
 {
@@ -16,7 +16,7 @@ GLFWwindow* window::initWindow()
 
 	GLFWwindow* window;
 	
-	window = glfwCreateWindow(width, height, "Compulsory 2", NULL, NULL);
+	window = glfwCreateWindow(mWidth, mHeight, "Folder Exam Visualization and Simulation Autumn 2024", NULL, NULL);
 	if (!window)
 	{
 		std::cout << "Failed to initialize window" << std::endl;
@@ -29,7 +29,7 @@ GLFWwindow* window::initWindow()
 	{
 		std::cout << "Failed to load GLAD" << std::endl;
 	}
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, mWidth, mHeight);
 	glEnable(GL_DEPTH_TEST);
 	Shader::CreateProgram();
 	glfwSetFramebufferSizeCallback(window, input::framebuffer_size_callback);

@@ -1,100 +1,21 @@
 #include "pch.h"
 #include "MathFunctions.h"
 
+#include "../Meshes/Mesh.h"
+#include "../Meshes/Cubes/Cubes.h"
+#include "../Meshes/Sphere/Spheres.h"
+#include "glm/glm.hpp"
 
-
-
-//int MathFunctions::findKnotInterval(float x)
-//{
-//	int my = n - 1;
-//
-//
-//	return my;
-//}
-//
-//void MathFunctions::deBoorsAlgorithm(float x)
-//{
-//}
-
-//std::vector<glm::vec3> MathFunctions::LASFileToPoints(const char* _fileDirectory)
-//{
-//  //  // create the reader
-//  //  laszip_POINTER laszip_reader;
-//  //  if (laszip_create(&laszip_reader))
-//		//std::cout << "DLL ERROR: creating laszip reader" << std::endl;
-//
-//  //  // open the reader
-//  //  laszip_BOOL is_compressed = true;
-//  //  if (laszip_open_reader(laszip_reader, _fileDirectory, &is_compressed))
-//		//std::cout << "DLL ERROR: opening laszip reader for '" << _fileDirectory << "'" << std::endl;
-//
-//  //  // get a pointer to the header of the reader that was just populated
-//  //  laszip_header* header;
-//  //  if (laszip_get_header_pointer(laszip_reader, &header))
-//		//std::cout << "DLL ERROR: getting header pointer from laszip reader" << std::endl;
-//  //  
-//  //  // get a pointer to the points that will be read
-//  //  laszip_point* point;
-//  //  if (laszip_get_point_pointer(laszip_reader, &point))
-//		//std::cout << "DLL ERROR: getting point pointer from laszip reader" << std::endl;
-//
-//  //  laszip_I64 numTotalPoints = (header->number_of_point_records ? header->number_of_point_records : header->extended_number_of_point_records);
-//
-//  //  // read the points
-//  //  std::vector<glm::vec3> rPoints;
-//  //  for (int i = 0; i < numTotalPoints; i++)
-//  //  {
-//  //      // Read the next point
-//  //      if (laszip_read_point(laszip_reader))
-//		//	std::cout << "DLL ERROR: reading point " << i << std::endl;
-//
-//  //      // Apply the scaling factors from the LAS header to get actual coordinates
-//  //      float x = (float)(point->X * header->x_scale_factor + header->x_offset);
-//  //      float y = (float)(point->Y * header->y_scale_factor + header->y_offset);
-//  //      float z = (float)(point->Z * header->z_scale_factor + header->z_offset);
-//
-//  //      glm::vec3 glmPoint = glm::vec3(x, y, z);
-//  //      rPoints.push_back(glmPoint);
-//  //  }
-//
-//  //  // Clean up the LASzip reader
-//  //  if (laszip_close_reader(laszip_reader))
-//		//std::cout << "DLL ERROR: closing laszip reader" << std::endl;
-//  //  if (laszip_destroy(laszip_reader))
-//		//std::cout << "DLL ERROR: destroying laszip reader" << std::endl;
-//
-//  //  return rPoints;
-//}
-
-//void MathFunctions::LASFileToCustomFileOfPoints(const char* _fileDirectoryInn, const char* _fileDirectoryOut)
-//{
-//    std::vector<glm::vec3> filePointCloudPoints = std::move(LASFileToPoints(_fileDirectoryInn));
-//
-//    std::ofstream fileOut(_fileDirectoryOut);
-//
-//    if(fileOut.is_open())
-//    {
-//        // Reset file
-//        fileOut.clear();
-//
-//        // First line is number of points
-//        fileOut << filePointCloudPoints.size() << "\n";
-//
-//        // The rest is the points
-//        for (int i = 0; i < filePointCloudPoints.size(); i++)
-//        {
-//            fileOut << filePointCloudPoints[i].x << ", " << filePointCloudPoints[i].z << ", " << filePointCloudPoints[i].y << "\n";
-//        }
-//
-//        fileOut.close();
-//    } else {
-//		std::cout << "Error opening file for custom LAS conversion" << std::endl;
-//    }
-//}
-
+float MathFunctions::calculateNormal(glm::vec3&& vector1, glm::vec3&& vector2)
+{
+    return vector1[0]* vector2[2]- vector2[0]*vector1[2];
+}
 
 // Calculation for B-Spline surface
-glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
+glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, 
+	const std::vector<float>& _uKnot, 
+	const std::vector<float>& _vKnot, 
+	const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 surfacePoint(0.0f);
 	int numControlPointsU = _controlPoints.size() - 1;
@@ -118,8 +39,36 @@ glm::vec3 BSpline::evaluateBSplineSurface(float _u, float _v, int _du, int _dv, 
 	return surfacePoint;
 }
 
+glm::vec3 BSpline::evaluateBSplineCurve(float _u, int _du, const std::vector<float>& _uKnot, const std::vector<glm::vec3>& _controlPoints)
+{
+    int numControlPoints = _controlPoints.size() - 1;
+
+    int span = 0;
+    while (_u >= _uKnot[span + _du + 1] && span < numControlPoints - _du) {
+        span++;
+    }
+
+    /* Evaluate the B-spline basis functions using Cox-de Boor recursion */
+    std::vector<float> basisFunctions(_du + 1);
+    for (int j = 0; j <= _du; ++j) {
+        basisFunctions[j] = CoxDeBoorRecursive(span - _du + j, _du, _u, _uKnot);
+    }
+
+    /* Evaluate the B-spline curve point */
+    glm::vec3 curvePoint(0.0f);
+    for (int j = 0; j <= _du; ++j) {
+           curvePoint += basisFunctions[j] * _controlPoints[span - _du + j];
+    }
+
+    return curvePoint;
+}
+
+
 // Calculation for B-Spline surface normal
-glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, const std::vector<float>& _uKnot, const std::vector<float>& _vKnot, const std::vector<std::vector<glm::vec3>>& _controlPoints)
+glm::vec3 BSpline::evaluateBSplineNormal(float _u, float _v, int _du, int _dv, int _UResolution, int _VResolution, 
+	const std::vector<float>& _uKnot, 
+	const std::vector<float>& _vKnot, 
+	const std::vector<std::vector<glm::vec3>>& _controlPoints)
 {
 	glm::vec3 P = BSpline::evaluateBSplineSurface(_u, _v, _du, _dv, _uKnot, _vKnot,
 		_controlPoints);
@@ -165,4 +114,112 @@ float BSpline::CoxDeBoorRecursive(int _i, int _d, float _uv, const std::vector<f
 		return left + right;
 	}
 }
+
+float Barycentric::getfriction(Vertex& _v1, Vertex& _v2, Vertex& _v3)
+{
+	return (_v1.mFriction + _v2.mFriction + _v3.mFriction) / 3;
+}
+
+/* Getting height from the objects */
+float Barycentric::GetHeight(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3,  glm::vec3 _barycode)
+{
+	return(_p1.y * _barycode.x + _p2.y * _barycode.y + _p3.y * _barycode.z);
+}
+
+glm::vec3 Barycentric::GetNormal(glm::vec3& _p1, glm::vec3& _p2, glm::vec3& _p3)
+{
+	glm::vec3 p12 = _p2 - _p1;
+	glm::vec3 p13 = _p3 - _p1;
+
+	glm::vec3 n123 = glm::cross(p12, p13);
+
+	glm::vec3 normalizedN = glm::normalize(n123);
+	normalizedN *= glm::vec3(-1.f);
+	return normalizedN;
+
+}
+
+bool Barycentric::BarycentricCord(Spheres _object, Cube _surface, float& _height, glm::vec3& _normal, float& _friction)
+{
+	for (auto Triangle : _surface.mIndices)
+	{
+		glm::vec3 barycord = Getbarycord(
+			_surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize,
+			_surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize, 
+		 	_surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize, 
+			_object.mPosition);
+
+		if (barycord.x == 0 &&
+			barycord.y == 0 &&
+			barycord.z == 0)
+		{
+			_object.mPosition = _object.GetPosition() + glm::vec3(0.1, 0, 0.1);
+			BarycentricCord(_object, _surface, _height, _normal, _friction);
+		}
+			if (barycord.x > 0 && barycord.x < 1 && 
+			barycord.y > 0 && barycord.y < 1 &&
+			barycord.z > 0 && barycord.z < 1)
+				{
+					/* Calculating each triangles height position scaled with the size */
+					glm::vec3 scaledPosition1 = _surface.mVertices[Triangle.mIndex1].mPosition * _surface.mSize;
+					glm::vec3 scaledPosition2 = _surface.mVertices[Triangle.mIndex2].mPosition * _surface.mSize;
+					glm::vec3 scaledPosition3 = _surface.mVertices[Triangle.mIndex3].mPosition * _surface.mSize;
+					_height = GetHeight(scaledPosition1, scaledPosition2, scaledPosition3, barycord);
+					_height += 1.f;
+
+					_friction = getfriction(
+						_surface.mVertices[Triangle.mIndex1],
+						_surface.mVertices[Triangle.mIndex2],
+						_surface.mVertices[Triangle.mIndex3]);
+
+					/* Calculation of normals */
+					_normal = GetNormal(
+						_surface.mVertices[Triangle.mIndex1].mPosition, 
+						_surface.mVertices[Triangle.mIndex2].mPosition, 
+						_surface.mVertices[Triangle.mIndex3].mPosition);
+					return true;
+				}
+	}
+	return false;
+}
+
+
+/* Calculation for the barysentric coordinates */
+glm::vec3 Barycentric::Getbarycord(glm::vec3 _p1, glm::vec3 _p2, glm::vec3 _p3, glm::vec3 _ballpoint)
+{
+	_p1.y = 0;
+	_p2.y = 0;
+	_p3.y = 0;
+	_ballpoint.y = 0;
+	glm::vec3 barcoords;
+
+	glm::vec3 p12 = _p2 - _p1;
+	glm::vec3 p13 = _p3 - _p1;
+
+	glm::vec3 n123 = glm::cross(p12, p13);
+
+	float area123 = n123.y;
+
+	glm::vec3 obj1 = _p1 - _ballpoint;
+	glm::vec3 obj2 = _p2 - _ballpoint;
+	glm::vec3 obj3 = _p3 - _ballpoint;
+
+	glm::vec3 subn1 = glm::cross(obj1, obj2);
+	glm::vec3 subn2 = glm::cross(obj2, obj3);
+	glm::vec3 subn3 = glm::cross(obj3, obj1);
+
+
+	float subtriangle1 = subn2.y;
+
+	float subtriangle2 = subn3.y;
+
+	float subtriangle3 = subn1.y; 
+
+	barcoords.x = subtriangle1 / area123; 
+	barcoords.y = subtriangle2 / area123; 
+	barcoords.z = subtriangle3 / area123; 
+
+	return barcoords;
+}
+
 
