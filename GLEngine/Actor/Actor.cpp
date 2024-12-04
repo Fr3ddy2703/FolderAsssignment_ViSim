@@ -9,12 +9,12 @@ void Player::createPlayer(glm::vec3 size, glm::vec3 pos, glm ::vec3 color)
 
 glm::vec3& Player::GetPlayerPos()
 {
-	 return position;
+	 return mPosition;
 }
 
  glm::vec3& Player::GetPlayerSize()
  {
-	 return size;
+	 return mSize;
  }
 
 void Player::drawPlayer()
@@ -41,12 +41,12 @@ void Enemy::drawEnemy()
 
 glm::vec3& Enemy::GetEnemyPos()
 {
-	return position;
+	return mPosition;
 }
 
 glm::vec3& Enemy::GetEnemySize()
 {
-	return size;
+	return mSize;
 }
 
 
@@ -67,11 +67,11 @@ void Item::drawItem()
 
 glm::vec3& Item::GetItemPos()
 {
-	return position;
+	return mPosition;
 }
 
 glm::vec3& Item::GetItemSize()
 {
-	return size;
+	return mSize;
 }
 

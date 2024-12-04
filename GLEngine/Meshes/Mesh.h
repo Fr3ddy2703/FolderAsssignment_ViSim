@@ -3,26 +3,28 @@
 
 struct Vertex
 {
-	glm::vec3 position = glm::vec3(0.f);
-	glm::vec3 Color = glm::vec3(0.f);
-	glm::vec3 normal = glm::vec3(0.f);
-	Vertex(glm::vec3 position, glm::vec3 rgb) : position(position), Color(rgb)
-	{
-	}
+	glm::vec3 mPosition = glm::vec3(0.f);
+	glm::vec3 mColor = glm::vec3(0.f);
+	glm::vec3 mNormal = glm::vec3(0.f);
+	float mFriction = 0;
+	Vertex(glm::vec3 _position, glm::vec3 _rgb, float _friction) : mPosition(_position), mColor(_rgb), mFriction(_friction)
+	{}
 };
 
 struct Triangle
 {
-	Triangle(unsigned int indice1, unsigned int indice2, unsigned int indice3): index1(indice1), index2(indice2), index3(indice3){}
-	unsigned int index1, index2, index3;
+	Triangle(unsigned int _indice1, unsigned int _indice2, unsigned int _indice3): mIndex1(_indice1), mIndex2(_indice2), mIndex3(_indice3){}
+	unsigned int mIndex1, mIndex2, mIndex3;
 };
 
 
 class Mesh
 {
 public:
-	std::vector<Vertex> Vertices;
-	std::vector<Triangle> Indices;
-	glm::vec3 position = glm::vec3(1);
-	glm::vec3 size = glm::vec3(1);
+	Mesh() = default;
+	~Mesh() = default;
+	std::vector<Vertex> mVertices;
+	std::vector<Triangle> mIndices;
+	glm::vec3 mPosition = glm::vec3(1);
+	glm::vec3 mSize = glm::vec3(1);
 };

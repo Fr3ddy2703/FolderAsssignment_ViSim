@@ -1,19 +1,19 @@
 #include "pch.h"
 #include "Shader.h"
 
-ShaderSource Shader::ReadShaderFromSource(const char* filepathVert, const char* filepathFrag)
+ShaderSource Shader::ReadShaderFromSource(const char* _filepathVert, const char* _filepathFrag)
 {
 	ShaderSource currentSource;
-	std::ifstream InFileVert(filepathVert);
-	std::ifstream InFileFrag(filepathFrag);
+	std::ifstream InFileVert(_filepathVert);
+	std::ifstream InFileFrag(_filepathFrag);
 	std::stringstream ssVert;
 	std::stringstream ssFrag;
 	if (InFileVert.is_open()&&InFileFrag.is_open())
 	{
 		ssVert << InFileVert.rdbuf();
 		ssFrag << InFileFrag.rdbuf();
-		currentSource.VertSource = ssVert.str();
-		currentSource.FragSource = ssFrag.str();
+		currentSource.mVertSource = ssVert.str();
+		currentSource.mFragSource = ssFrag.str();
 		return currentSource;
 	}
 	return {};
@@ -25,8 +25,8 @@ void Shader::CreateProgram()
 {
 	ShaderSource source = ReadShaderFromSource("Shaders/VertexShader.vert", "Shaders/FragmentShader.frag");
 	ShaderProgram = glCreateProgram();
-	const char* VertexSource = source.VertSource.c_str();
-	const char* FragmentSource = source.FragSource.c_str();
+	const char* VertexSource = source.mVertSource.c_str();
+	const char* FragmentSource = source.mFragSource.c_str();
 	GLuint vs = glCreateShader(GL_VERTEX_SHADER);
 	GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
 	int good;
