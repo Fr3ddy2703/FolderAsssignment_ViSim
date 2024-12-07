@@ -165,6 +165,7 @@
     <ClCompile Include="Meshes\BSplineSurface\BSplineSurface.cpp" />
     <ClCompile Include="Meshes\Cubes\Cubes.cpp" />
     <ClCompile Include="Meshes\Mesh.cpp" />
+    <ClCompile Include="Meshes\ParticleSystem\ParticleSystem.cpp" />
     <ClCompile Include="Meshes\PointCloud\PointCloud.cpp" />
     <ClCompile Include="Meshes\Sphere\Spheres.cpp" />
     <ClCompile Include="pch.cpp">
@@ -275,7 +276,6 @@
     <ClInclude Include="Libraries\includes\glad\glad.h" />
     <ClInclude Include="Libraries\includes\GLFW\glfw3.h" />
     <ClInclude Include="Libraries\includes\GLFW\glfw3native.h" />
-    <ClInclude Include="Libraries\includes\glm\common.hpp" />
     <ClInclude Include="Libraries\includes\glm\detail\compute_common.hpp" />
     <ClInclude Include="Libraries\includes\glm\detail\compute_vector_relational.hpp" />
     <ClInclude Include="Libraries\includes\glm\detail\qualifier.hpp" />
@@ -572,6 +572,7 @@
     <ClInclude Include="Meshes\BSplineSurface\BSplineSurface.h" />
     <ClInclude Include="Meshes\Cubes\Cubes.h" />
     <ClInclude Include="Meshes\Mesh.h" />
+    <ClInclude Include="Meshes\ParticleSystem\ParticleSystem.h" />
     <ClInclude Include="Meshes\PointCloud\PointCloud.h" />
     <ClInclude Include="Meshes\Sphere\Spheres.h" />
     <ClInclude Include="pch.h" />
