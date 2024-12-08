@@ -1,6 +1,7 @@
 #pragma once
+#include "../Mesh.h"
 
-class ParticleSystem
+class ParticleSystem : public Mesh
 {
 
 public:
@@ -14,7 +15,7 @@ private:
 	std::vector<glm::vec3> mPosition;
 	std::vector<glm::vec3> mVelocity;
 	std::vector<float> mLifeSpan;
-	std::vector<glm::vec4> mColor;
+	glm::vec3 mColor;
 	int mMaxParticles;
 	float mGravity = -0.5f;
 	unsigned int mVAO, mVBO;

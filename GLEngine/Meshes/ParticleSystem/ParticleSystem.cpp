@@ -3,7 +3,8 @@
 
 
 ParticleSystem::ParticleSystem(int _maxParticles) : mMaxParticles(_maxParticles)
-{	mPosition.reserve(mMaxParticles);
+{
+	mPosition.reserve(mMaxParticles);
 	mVelocity.reserve(mMaxParticles);
 	mLifeSpan.reserve(mMaxParticles);
 }
@@ -18,17 +19,13 @@ void ParticleSystem::update(float _deltaTime)
 
 		if (mLifeSpan[i] <= 0.0f)
 		{
-			int last = mLifeSpan.size() - 1;
-			mPosition[i] = mPosition[last];
-			mVelocity[i] = mVelocity[last];
-			mLifeSpan[i] = mLifeSpan[last];
-			mPosition.pop_back();
-			mVelocity.pop_back();
-			mLifeSpan.pop_back();
+			mPosition.erase(mPosition.begin() + i);
+			mVelocity.erase(mVelocity.begin() + i);
+			mLifeSpan.erase(mLifeSpan.begin() + i);
 			--i;
 		}
 	}
-	std::cout << mLifeSpan.size() << std::endl;
+	/*std::cout << mLifeSpan.size() << std::endl;*/
 	BindBuffer();
 }
 
