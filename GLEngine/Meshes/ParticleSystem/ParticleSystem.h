@@ -16,7 +16,7 @@ private:
 	std::vector<float> mLifeSpan;
 	std::vector<glm::vec4> mColor;
 	int mMaxParticles;
-	float mGravity = 1.f;
+	float mGravity = -0.5f;
 	unsigned int mVAO, mVBO;
 
 };

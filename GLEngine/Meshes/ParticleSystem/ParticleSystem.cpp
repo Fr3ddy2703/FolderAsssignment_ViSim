@@ -12,7 +12,7 @@ void ParticleSystem::update(float _deltaTime)
 {
 	for (int i = 0; i < mLifeSpan.size(); ++i)
 	{
-		mVelocity[i].y -= mGravity / 8.f * _deltaTime;
+        mVelocity[i] += glm::vec3(glm::linearRand(-0.01f, 0.01f), -mGravity * _deltaTime, glm::linearRand(-0.01f, 0.01f));
 		mPosition[i] -= mVelocity[i] * _deltaTime;
 		mLifeSpan[i] -= _deltaTime;
 
@@ -40,14 +40,20 @@ void ParticleSystem::draw()
 	glBindVertexArray(mVAO);
 	glDrawArrays(GL_POINTS, 0, mPosition.size());
 	glBindVertexArray(0);
+	glPointSize(5.f);
+
 }
 
 void ParticleSystem::emit(const glm::vec3& _position, float _lifeSpan)
 {
 	if (mPosition.size() < mMaxParticles)
 	{
-			mPosition.emplace_back(_position);
-			mVelocity.emplace_back(glm::sphericalRand(1.f));
+		glm::vec3 randomOffset = glm::linearRand(glm::vec3(-5.0f, 0.0f, -5.0f), glm::vec3(5.0f, 0.0f, 5.0f));
+        glm::vec3 startPosition = _position + randomOffset;
+
+		glm::vec3 randomVelocity = glm::vec3(glm::linearRand(-0.1f, 0.1f), glm::linearRand(0.5f, 1.5f), glm::linearRand(-0.1f, 0.1f));
+			mPosition.emplace_back(startPosition);
+			mVelocity.emplace_back(randomVelocity);
 			mLifeSpan.emplace_back(_lifeSpan);
 	}
 }

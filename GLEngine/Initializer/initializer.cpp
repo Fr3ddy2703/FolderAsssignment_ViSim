@@ -197,9 +197,8 @@ void initializer::Run()
 	Create();
  	float FirstFrame = 0.0f;
 	glm::vec3 color(Color::Grey);
-	ParticleSystem particleSystem = ParticleSystem(1000);
+	ParticleSystem particleSystem = ParticleSystem(1000000);
 	particleSystem.BindBuffer();
-	glPointSize(5.f);
 	while (!glfwWindowShouldClose(mWindow))
 	{
 		glEnable(GL_DEPTH_TEST);
@@ -248,8 +247,8 @@ void initializer::Run()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(Shader::ShaderProgram);
 
-		glm::vec3 ParticlePos = glm::vec3(0, 0, 0);
-		float lifeSpan = 10.f;
+		glm::vec3 ParticlePos = glm::vec3(0, 10, 0);
+		float lifeSpan = 5.f;
 		particleSystem.emit(ParticlePos, lifeSpan);
 		particleSystem.update(mDeltaTime);
 
