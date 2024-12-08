@@ -5,11 +5,7 @@ class VelocityComponent : Components
 
 {
 public:
-	std::vector<glm::vec3> velocity = { glm::vec3(1.f) };
+	glm::vec3 mVelocity;
 
-	VelocityComponent(std::vector<glm::vec3> vel) : velocity(vel)
-	{
-		velocity = vel;
-	}
 };
 

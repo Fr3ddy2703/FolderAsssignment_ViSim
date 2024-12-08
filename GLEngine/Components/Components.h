@@ -3,7 +3,7 @@
 class Components
 {
 public:
-	 Components() = default;
+	 virtual void Component() = 0;
 
 };
 
