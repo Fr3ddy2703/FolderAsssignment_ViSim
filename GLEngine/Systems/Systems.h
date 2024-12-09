@@ -5,6 +5,6 @@
 class Systems
 {
 public:
-	virtual void Update(std::list<EntityComponent> _entities);
+	virtual void Update(std::vector<EntityComponent> _entities);
 };
 

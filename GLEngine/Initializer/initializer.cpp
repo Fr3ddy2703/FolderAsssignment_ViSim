@@ -293,12 +293,12 @@ void initializer::Update(float _deltaTime)
 	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
 
 	/* Collision for all balls */
-for (int i = 0; i < mBalls.size(); ++i)
-{
-    for (int j = i + 1; j < mBalls.size(); ++j)
-    {
-		collision.checkBallBallCollision(mBalls[i], mBalls[j]);
-    }
-    mBalls[i].UpdatePos(_deltaTime);
-}
+	for (int i = 0; i < mBalls.size(); ++i)
+	{
+		for (int j = i + 1; j < mBalls.size(); ++j)
+		{
+			collision.checkBallBallCollision(mBalls[i], mBalls[j]);
+		}
+		mBalls[i].UpdatePos(_deltaTime);
+	}
 }
