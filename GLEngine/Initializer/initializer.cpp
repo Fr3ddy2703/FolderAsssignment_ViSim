@@ -4,9 +4,18 @@
 #include "../MathFunctions/MathFunctions.h"
 #include "../Meshes/ParticleSystem/ParticleSystem.h"
 #include "../Shaders/shader.h"
+#include "../Components/Entity/Entity.h"
+#include "../Components/ComponentManager.h"
+#include "../Components/PositionComponents/PositionComponent.h"
+#include "../Systems/MovementSystem/MovementSystem.h"
 
 float initializer::mDeltaTime = 0.f;
 camera initializer::mUseCamera = camera();
+ComponentManager<PositionComponent> positionManager;
+MovementSystem movementSystem(positionManager);
+Entity newEntity = {.EntityId = 0};
+Entity Entity2= {.EntityId = 1};
+Entity Entity3 = {.EntityId = 2};
 
 
 void initializer::Initialize()
@@ -20,168 +29,163 @@ void initializer::Initialize()
 void initializer::Create()
 {
 
+	PositionComponent position;
+	PositionComponent position2;
+	PositionComponent position3;
+
+	position.mPosition = glm::vec3(100.f);
+	position2.mPosition = glm::vec3(50.f);
+	position3.mPosition = glm::vec3(10.f);
+
+	entities.push_back(newEntity);
+	entities.push_back(Entity2);
+	entities.push_back(Entity3);
+
+	positionManager.addComponent(newEntity.EntityId, position);
+	positionManager.addComponent(Entity2.EntityId, position2);
+	positionManager.addComponent(Entity3.EntityId, position3);
+
 	/* Scene */
-	mFloor.CreateCube(glm::vec3(18.f, 0.5f, 9.f), glm::vec3(1.f, 0.f, 9.f),Color::Green);
 
-	/* Left wall */
-	mWall.CreateCube(glm::vec3(20.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 0.f),Color::Brown);
-	mWall.AddCollider(mWall.GetScale(), ECollisionType::Boxes);
+	/* Entity 0 */
+	mFloor.CreateCube(newEntity.EntityId,glm::vec3(18.f, 0.5f, 9.f), position.mPosition, Color::Green);
+	/* Entity 1 */
+	mWall.CreateCube(Entity2.EntityId,glm::vec3(18.f, 0.5f, 9.f), position2.mPosition, Color::Red);
+	/* Entity 2 */
+	mWall2.CreateCube(Entity3.EntityId,glm::vec3(18.f, 0.5f, 9.f), position3.mPosition, Color::Blue);
 
-	/* Right wall */
-	mWall2.CreateCube(glm::vec3(20.f, 1.f, 1.f), glm::vec3(0.f, 0.f, 10.f),Color::Brown);
-	mWall2.AddCollider(mWall2.GetScale(), ECollisionType::Boxes);
-
-	/* Front wall */
-	mWall3.CreateCube(glm::vec3(-1.f, 1.f, -9.f), glm::vec3(1.f, 0.f, 0.f),Color::Brown);
-	mWall3.AddCollider(mWall3.GetScale(), ECollisionType::Boxes);
-
-	/* Back wall */
-	mWall4.CreateCube(glm::vec3(1.f, 1.f, -9.f), glm::vec3(19.f, 0.f, 0.f),Color::Brown);
-	mWall4.AddCollider(mWall4.GetScale(), ECollisionType::Boxes);
-
-	/* Player */
-	mPlayer = std::make_shared<Player>();
-	mPlayer->createPlayer(glm::vec3(0.5f), glm::vec3(10.f, 0.75f, 5.f), Color::Blue);
-
-	/* Enemy */
-	mEnemy = std::make_shared<Enemy>();
-	mEnemy->createEnemy(glm::vec3(0.5f), glm::vec3(10.f, 0.75f, 10.f), Color::Red);
-
-	/* Item */
-	mItem = std::make_shared<Item>();
-	mItem->createItem(glm::vec3(0.25f), 4.f, glm::vec3(15.f, 0.75f, 5.f), 1.f, glm::vec3(0.f, 0.f, 0.f), Color::Gold);
 
 	mBSplines = std::make_shared<BSplineSurface>();
 	mBSplines->CreateBSplineSurface(mUResolution, mVResolution, mDu, mDv, mUKnot, mVKnot, mControlPoints);
 
-	mPCloud = std::make_shared<PointCloud>();
-	std::string directory = "ReadableFiles/Budor/32-2-519-158-01.txt";
-	mPCloud->CreatePointCloudFromFile(directory.c_str(), 0.01f);
-	mPCloud->mPosition;
-	mPCloud->mIndices;
+	//mPCloud = std::make_shared<PointCloud>();
+	//std::string directory = "ReadableFiles/Budor/32-2-519-158-01.txt";
+	//mPCloud->CreatePointCloudFromFile(directory.c_str(), 0.01f);
+	//mPCloud->mPosition;
+	//mPCloud->mIndices;
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	/*Folder exam task 1.3 */
-	glm::vec3 minVertices = glm::vec3(0);
-	glm::vec3 maxVertices = glm::vec3(0);
-	for (Vertex& vertex : mPCloud->mVertices)
-	{
-		if (vertex.mPosition.x < minVertices.x)
-		{
-			minVertices.x = vertex.mPosition.x;
-		}
-		if (vertex.mPosition.y < minVertices.y)
-		{
-			minVertices.y = vertex.mPosition.y;
-		}
-		if (vertex.mPosition.z < minVertices.z )
-		{
-			minVertices.z = vertex.mPosition.z;
-		}
-		if (vertex.mPosition.x > maxVertices.x)
-		{
-			maxVertices.x = vertex.mPosition.x;
-		}
-		if (vertex.mPosition.y > maxVertices.y)
-		{
-			maxVertices.y = vertex.mPosition.y;
-		}
-		if (vertex.mPosition.z > maxVertices.z )
-		{
-			maxVertices.z = vertex.mPosition.z;
-		}
-	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	///*Folder exam task 1.3 */
+	//glm::vec3 minVertices = glm::vec3(0);
+	//glm::vec3 maxVertices = glm::vec3(0);
+	//for (Vertex& vertex : mPCloud->mVertices)
+	//{
+	//	if (vertex.mPosition.x < minVertices.x)
+	//	{
+	//		minVertices.x = vertex.mPosition.x;
+	//	}
+	//	if (vertex.mPosition.y < minVertices.y)
+	//	{
+	//		minVertices.y = vertex.mPosition.y;
+	//	}
+	//	if (vertex.mPosition.z < minVertices.z )
+	//	{
+	//		minVertices.z = vertex.mPosition.z;
+	//	}
+	//	if (vertex.mPosition.x > maxVertices.x)
+	//	{
+	//		maxVertices.x = vertex.mPosition.x;
+	//	}
+	//	if (vertex.mPosition.y > maxVertices.y)
+	//	{
+	//		maxVertices.y = vertex.mPosition.y;
+	//	}
+	//	if (vertex.mPosition.z > maxVertices.z )
+	//	{
+	//		maxVertices.z = vertex.mPosition.z;
+	//	}
+	//}
 
 
-	/* The surface' variables */
-	std::vector<Vertex> vertices;
-	std::vector<Triangle> index;
-	float friction = 0.f;
-	int resolution = 10;
-	float distX = maxVertices.x - minVertices.x;
-	float distZ = maxVertices.z - minVertices.z;
-	float distcapX = distX / resolution;
-	float distcapZ = distZ / resolution;
+	///* The surface' variables */
+	//std::vector<Vertex> vertices;
+	//std::vector<Triangle> index;
+	//float friction = 0.f;
+	//int resolution = 10;
+	//float distX = maxVertices.x - minVertices.x;
+	//float distZ = maxVertices.z - minVertices.z;
+	//float distcapX = distX / resolution;
+	//float distcapZ = distZ / resolution;
 
-	for (int i = 0; i <= resolution; i++)
-	{
-		for (int j = 0; j <= resolution; j++)
-		{
-			/* For each coordinates in the grid */
-			glm::vec3 gridPos(
-				minVertices.x + distcapX * i, 
-				0.0f,                         
-				minVertices.z + distcapZ * j   
-			);
+	//for (int i = 0; i <= resolution; i++)
+	//{
+	//	for (int j = 0; j <= resolution; j++)
+	//	{
+	//		/* For each coordinates in the grid */
+	//		glm::vec3 gridPos(
+	//			minVertices.x + distcapX * i, 
+	//			0.0f,                         
+	//			minVertices.z + distcapZ * j   
+	//		);
 
-			/* Variables for the height */
-			float heightSum = 0.0f;
-			int heightCount = 0;
+	//		/* Variables for the height */
+	//		float heightSum = 0.0f;
+	//		int heightCount = 0;
 
-			/* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
-			float thresholdDistance = 0.01f;
+	//		/* The threshold of how detailed the surface should be, lower value give more detail on the terrain */
+	//		float thresholdDistance = 0.01f;
 
-			for (const Vertex& vert : mPCloud->mVertices)
-			{
-				float distance = glm::distance(glm::vec2(gridPos.x,  gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
+	//		for (const Vertex& vert : mPCloud->mVertices)
+	//		{
+	//			float distance = glm::distance(glm::vec2(gridPos.x,  gridPos.z), glm::vec2(vert.mPosition.x, vert.mPosition.z));
 
-				if (distance < thresholdDistance)
-				{
-					heightSum -= vert.mPosition.y;
-					heightCount++;
-				}
-			}
+	//			if (distance < thresholdDistance)
+	//			{
+	//				heightSum -= vert.mPosition.y;
+	//				heightCount++;
+	//			}
+	//		}
 
-			// Calculate the average height based on nearby points
-			if (heightCount > 0) {
-				gridPos.y = heightSum / heightCount;
-			}
+	//		// Calculate the average height based on nearby points
+	//		if (heightCount > 0) {
+	//			gridPos.y = heightSum / heightCount;
+	//		}
 
-			glm::vec3 color = glm::vec3(0, 0, 1);
-			if (gridPos.y >= 0 && gridPos.y <= 10)
-			{
-				color = glm::vec3(1, 0,0);
-				friction = 1.f;
-			} else
-			{
-				friction = 0.f;
-			}
+	//		glm::vec3 color = glm::vec3(0, 0, 1);
+	//		if (gridPos.y >= 0 && gridPos.y <= 10)
+	//		{
+	//			color = glm::vec3(1, 0,0);
+	//			friction = 1.f;
+	//		} else
+	//		{
+	//			friction = 0.f;
+	//		}
 
-			vertices.push_back(Vertex(gridPos, color, friction));
-		}
-	}
+	//		vertices.push_back(Vertex(gridPos, color, friction));
+	//	}
+	//}
 
-	for (int i = 0; i < resolution; i++)
-	{
-		for (int j = 0; j < resolution; j++)
-		{
-			/* For each corner in a square */
-			int topLeft = i * (resolution + 1) + j;
-			int topRight = topLeft + 1;
-			int bottomLeft = topLeft + (resolution + 1);
-			int bottomRight = bottomLeft + 1;
+	//for (int i = 0; i < resolution; i++)
+	//{
+	//	for (int j = 0; j < resolution; j++)
+	//	{
+	//		/* For each corner in a square */
+	//		int topLeft = i * (resolution + 1) + j;
+	//		int topRight = topLeft + 1;
+	//		int bottomLeft = topLeft + (resolution + 1);
+	//		int bottomRight = bottomLeft + 1;
 
-			/* First triangle of the square */
-			index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
+	//		/* First triangle of the square */
+	//		index.push_back(Triangle(topLeft, bottomLeft, bottomRight));
 
-			/* Second triangle of the square */
-			index.push_back(Triangle(topLeft, bottomRight, topRight));
-		}
-	}
+	//		/* Second triangle of the square */
+	//		index.push_back(Triangle(topLeft, bottomRight, topRight));
+	//	}
+	//}
 
-	/* Calculations for normals */
-	for (const Triangle& triangle : index)
-    {
-		glm::vec3 normal = glm::cross(vertices[triangle.mIndex2].mPosition - vertices[triangle.mIndex1].mPosition,
-                                      vertices[triangle.mIndex3].mPosition - vertices[triangle.mIndex1].mPosition);
-        vertices[triangle.mIndex1].mNormal += glm::normalize(normal);
-        vertices[triangle.mIndex2].mNormal += glm::normalize(normal);
-        vertices[triangle.mIndex3].mNormal += glm::normalize(normal);
-    }
-	
+	///* Calculations for normals */
+	//for (const Triangle& triangle : index)
+ //   {
+	//	glm::vec3 normal = glm::cross(vertices[triangle.mIndex2].mPosition - vertices[triangle.mIndex1].mPosition,
+ //                                     vertices[triangle.mIndex3].mPosition - vertices[triangle.mIndex1].mPosition);
+ //       vertices[triangle.mIndex1].mNormal += glm::normalize(normal);
+ //       vertices[triangle.mIndex2].mNormal += glm::normalize(normal);
+ //       vertices[triangle.mIndex3].mNormal += glm::normalize(normal);
+ //   }
+	//
 
-	mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(40));
+	//mSurface.CreateSurfaceFromPointCLoud(vertices, index, glm::vec3(40));
 
 
 	mCubes.emplace_back(mFloor);
@@ -197,11 +201,11 @@ void initializer::Run()
 	Create();
  	float FirstFrame = 0.0f;
 	glm::vec3 color(Color::Grey);
-	ParticleSystem particleSystem = ParticleSystem(1000000);
+	ParticleSystem particleSystem = ParticleSystem(100000);
 	particleSystem.BindBuffer();
+	glEnable(GL_DEPTH_TEST);
 	while (!glfwWindowShouldClose(mWindow))
 	{
-		glEnable(GL_DEPTH_TEST);
 		const auto CurrentFrame = static_cast<float>(glfwGetTime());
 		mDeltaTime = CurrentFrame - FirstFrame;
 		FirstFrame = CurrentFrame;
@@ -215,7 +219,7 @@ void initializer::Run()
 			{
 				Spheres newBall;
 				newBall.CreateSphere(glm::vec3(1.f), 4.f, 
-					mUseCamera.mCameraPos + mUseCamera.mCameraFront,1.f, glm::vec3(-1.f, 0.f, 0.f), Color::Gold);
+				mUseCamera.mCameraPos + mUseCamera.mCameraFront,1.f, glm::vec3(-1.f, 0.f, 0.f), Color::Gold);
 				mBalls.push_back(newBall);
 				lastSpawnTime = currentTime;
 			}
@@ -255,14 +259,16 @@ void initializer::Run()
 		KeyBoardInput::processInput(mWindow, mPlayer);
 		Update(mDeltaTime);
 
+	
 
 		glUniformMatrix4fv(mUseCamera.mProjectionLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getProjection(window::mWidth, window::mHeight)));
 		glUniformMatrix4fv(mUseCamera.mViewLoc, 1, GL_FALSE, glm::value_ptr(mUseCamera.getView()));
 		glUniform3fv(glGetUniformLocation(Shader::ShaderProgram, "viewPos"), 1, glm::value_ptr(mUseCamera.mCameraPos));
-		//for (auto& cube : mCubes)
-		//{
-		//	cube.Draw();
-		//}
+		int counter = 0;
+		for (auto& cube : mCubes)
+		{
+			cube.Draw(positionManager, counter++);
+		}
 		for (auto& sphere : mBalls)
 		{
 			sphere.DrawSphere();
@@ -271,9 +277,9 @@ void initializer::Run()
 		//mEnemy->drawEnemy();
 		//mItem->drawItem();
 
-		mBSplines->Draw();
+	/*	mBSplines->Draw();*/
 		/*mPCloud->Draw();*/
-		mSurface.Draw();
+	/*	mSurface.Draw();*/
 		particleSystem.draw();
 
 	
@@ -286,11 +292,13 @@ void initializer::Run()
 void initializer::Update(float _deltaTime)
 {
 	Collision collision;
-	if(collision.checkBoxBoxCollision(mPlayer, mEnemy))
-	{
-		collision.bounceBack(mEnemy, mPlayer, 1.f);
-	}
-	collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
+	//if(collision.checkBoxBoxCollision(mPlayer, mEnemy))
+	//{
+	//	collision.bounceBack(mEnemy, mPlayer, 1.f);
+	//}
+	//collision.enemyAI(mEnemy, mPlayer, 1, _deltaTime);
+
+	movementSystem.Update(entities, _deltaTime);
 
 	/* Collision for all balls */
 	for (int i = 0; i < mBalls.size(); ++i)

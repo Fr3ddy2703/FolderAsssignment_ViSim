@@ -78,10 +78,10 @@
     <ClCompile Include="Systems\HealthSystem\HealthSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Systems\UpdateSystem\UpdateSystem.cpp">
+    <ClCompile Include="Systems\MovementSystem\MovementSystem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Components\EntityComponent\EntityComponent.cpp">
+    <ClCompile Include="Components\Entity\Entity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Components\ComponentManager.cpp">
@@ -1283,10 +1283,10 @@
     <ClInclude Include="Systems\HealthSystem\HealthSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Systems\UpdateSystem\UpdateSystem.h">
+    <ClInclude Include="Systems\MovementSystem\MovementSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Components\EntityComponent\EntityComponent.h">
+    <ClInclude Include="Components\Entity\Entity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components\ComponentManager.h">

@@ -26,7 +26,6 @@ void ParticleSystem::update(float _deltaTime)
 		}
 	}
 	/*std::cout << mLifeSpan.size() << std::endl;*/
-	BindBuffer();
 }
 
 void ParticleSystem::draw()
@@ -70,8 +69,11 @@ void ParticleSystem::BindBuffer()
 
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)0);
-
     glBindVertexArray(0);
 }
 
-
+void ParticleSystem::UpdateBuffer()
+{
+	glBindBuffer(GL_ARRAY_BUFFER, mVBO);
+    glBufferData(GL_ARRAY_BUFFER, mMaxParticles * sizeof(glm::vec3), nullptr, GL_STATIC_DRAW);
+}

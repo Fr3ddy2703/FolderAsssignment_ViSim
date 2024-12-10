@@ -142,7 +142,7 @@
     <ClCompile Include="Collision\Collision.cpp" />
     <ClCompile Include="Components\ComponentManager.cpp" />
     <ClCompile Include="Components\Components.cpp" />
-    <ClCompile Include="Components\EntityComponent\EntityComponent.cpp" />
+    <ClCompile Include="Components\Entity\Entity.cpp" />
     <ClCompile Include="Components\HealthComponents\HealthComponent.cpp" />
     <ClCompile Include="Components\PositionComponents\PositionComponent.cpp" />
     <ClCompile Include="Components\VelocityComponents\VelocityComponent.cpp" />
@@ -175,7 +175,7 @@
     <ClCompile Include="Shaders\Shader.cpp" />
     <ClCompile Include="Systems\HealthSystem\HealthSystem.cpp" />
     <ClCompile Include="Systems\Systems.cpp" />
-    <ClCompile Include="Systems\UpdateSystem\UpdateSystem.cpp" />
+    <ClCompile Include="Systems\MovementSystem\MovementSystem.cpp" />
     <ClCompile Include="Window\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,7 +184,7 @@
     <ClInclude Include="Collision\Collision.h" />
     <ClInclude Include="Components\ComponentManager.h" />
     <ClInclude Include="Components\Components.h" />
-    <ClInclude Include="Components\EntityComponent\EntityComponent.h" />
+    <ClInclude Include="Components\Entity\Entity.h" />
     <ClInclude Include="Components\HealthComponents\HealthComponent.h" />
     <ClInclude Include="Components\PositionComponents\PositionComponent.h" />
     <ClInclude Include="Components\VelocityComponents\VelocityComponent.h" />
@@ -580,7 +580,7 @@
     <ClInclude Include="Shaders\Shader.h" />
     <ClInclude Include="Systems\HealthSystem\HealthSystem.h" />
     <ClInclude Include="Systems\Systems.h" />
-    <ClInclude Include="Systems\UpdateSystem\UpdateSystem.h" />
+    <ClInclude Include="Systems\MovementSystem\MovementSystem.h" />
     <ClInclude Include="Window\Window.h" />
   </ItemGroup>
   <ItemGroup>

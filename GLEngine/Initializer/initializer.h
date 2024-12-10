@@ -5,6 +5,7 @@
 #include "../Actor/Actor.h"
 #include "../Meshes/BSplineSurface/BSplineSurface.h"
 #include "../Meshes/PointCloud/PointCloud.h"
+#include "../Components/Entity/Entity.h"
 
 class ElementBuffer;
 class VertexBuffer;
@@ -24,8 +25,6 @@ public:
 	Cube mWall3;
 	Cube mWall4;
 	Cube mSurface;
-	Spheres mKule;
-	Spheres mKule2;
 
 	/* Degrees for the Bi-Quadratic */
 	int mDu = 2;
@@ -58,7 +57,7 @@ public:
 private:
 	/* private Shared Pointers */
 	std::vector<Cube> mCubes; 
-
+	std::vector<Entity> entities;
 	std::shared_ptr<BSplineSurface> mBSplines;
 	std::shared_ptr<PointCloud> mPCloud;
 	std::shared_ptr<Player> mPlayer;

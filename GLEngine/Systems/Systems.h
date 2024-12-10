@@ -1,10 +1,9 @@
 #pragma once
-#include "../Components/ComponentManager.h"
-#include "../Components/EntityComponent/EntityComponent.h"
+#include "../Components/Entity/Entity.h"
 
 class Systems
 {
 public:
-	virtual void Update(std::vector<EntityComponent> _entities);
+	virtual void Update(const std::vector<Entity>& _entities, float _deltatime) = 0;
 };
 

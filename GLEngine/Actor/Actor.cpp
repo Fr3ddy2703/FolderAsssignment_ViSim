@@ -4,7 +4,7 @@
 
 void Player::createPlayer(glm::vec3 size, glm::vec3 pos, glm ::vec3 color)
 {
-	CreateCube(size, pos, color);
+	//CreateCube(size, pos, color);
 }
 
 glm::vec3& Player::GetPlayerPos()
@@ -19,7 +19,7 @@ glm::vec3& Player::GetPlayerPos()
 
 void Player::drawPlayer()
 {
-	Draw();	
+	/*Draw();	*/
 }
 
 
@@ -31,12 +31,12 @@ Enemy::Enemy()
 
 void Enemy::createEnemy(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
 {
-	CreateCube(_size, _pos, _color);
+	/*CreateCube(_size, _pos, _color);*/
 }
 
 void Enemy::drawEnemy()
 {
-	Draw();
+	//Draw();
 }
 
 glm::vec3& Enemy::GetEnemyPos()

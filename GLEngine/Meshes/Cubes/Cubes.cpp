@@ -1,12 +1,15 @@
 #include "pch.h"
 #include "Cubes.h"
+#include "../../Components/ComponentManager.h"
+#include "../../Components/PositionComponents/PositionComponent.h"
 #include "../../Shaders/shader.h"
 
 /* Creation of Cubes */
-void Cube::CreateCube(glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
+void Cube::CreateCube(int _entityID, glm::vec3 _size, glm::vec3 _pos, glm::vec3 _color)
 {
-    GetPosition() = mPosition;
-    GetScale() = mSize;
+    GetPosition() = _pos;
+	GetScale() = _size;
+
 
     Vertex v0{glm::vec3(0.f, 0.f, 0.f), _color, 0}; /* Front-Bot-left */
     Vertex v1{glm::vec3(1.f, 0.f, 0.f), _color, 0}; /* Front-Bot-right */
@@ -87,11 +90,10 @@ void Cube::AddCollider(glm::vec3 _scale, ECollisionType _collisionType, glm::vec
     	mCollider = Collision(GetPosition()+_offset, _scale, _offset, _collisionType);
 }
 
-void Cube::Draw()
+void Cube::Draw(ComponentManager<PositionComponent>& _position, int _id)
 {
-   
 	glm::mat4 model = glm::mat4(1.f);
-    model = glm::translate(model, mPosition);
+    model = glm::translate(model, _position.getComponent(_id).mPosition);
     model = glm::scale(model, mSize);
     glUniformMatrix4fv(glGetUniformLocation(Shader::ShaderProgram, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
     glBindVertexArray(mVAO);

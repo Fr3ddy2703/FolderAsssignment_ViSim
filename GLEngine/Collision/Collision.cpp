@@ -54,19 +54,19 @@ bool Collision::checkPlayerItemCollision(std::shared_ptr<Player> _player, std::s
 	return false;
 }
 
-bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::shared_ptr<Enemy> _enemy)
-{
-
-		if (((_player->mPosition.x <= _enemy->mPosition.x + _enemy->mSize.x) &&
-			(_player->mPosition.x >= _enemy->mPosition.x - _enemy->mSize.x)) &&
-			((_player->mPosition.z - _player->mSize.z <= _enemy->mPosition.z + _enemy->mSize.z) &&
-				(_player->mPosition.z >= _enemy->mPosition.z - _enemy->mSize.z)))
-		{
-			//std::cout << "Collision detected" << "\n";
-			return true;
-		}
-    return false;
-}
+//bool Collision::checkBoxBoxCollision(std::shared_ptr<Player> _player, std::shared_ptr<Enemy> _enemy)
+//{
+//
+//		if (((_player->mPosition.x <= _enemy->mPosition.x + _enemy->mSize.x) &&
+//			(_player->mPosition.x >= _enemy->mPosition.x - _enemy->mSize.x)) &&
+//			((_player->mPosition.z - _player->mSize.z <= _enemy->mPosition.z + _enemy->mSize.z) &&
+//				(_player->mPosition.z >= _enemy->mPosition.z - _enemy->mSize.z)))
+//		{
+//			//std::cout << "Collision detected" << "\n";
+//			return true;
+//		}
+//    return false;
+//}
 
 
 
@@ -80,7 +80,7 @@ bool Collision::checkBallBallCollision(Spheres& _ball1, Spheres& _ball2)
 	if(totald > radius)
             return false;
         ballphysics(_ball1, _ball2);
-		//	std::cout << "Collision detected" << std::endl;
+		//std::cout << "Collision detected" << std::endl;
 		//std::cout << "Ball1 position: " << _ball1.mPosition.x << " " << _ball1.mPosition.y << " " << _ball1.mPosition.z << std::endl;
 		//std::cout << "Ball2 position: " << _ball2.mPosition.x << " " << _ball2.mPosition.y << " " << _ball2.mPosition.z << std::endl;
 

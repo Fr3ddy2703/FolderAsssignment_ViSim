@@ -10,26 +10,26 @@ private:
 
 public:
 
-	void addComponent(int entityID, const T& component) 
+	void addComponent(int _entityID, const T _component) 
 	{
-		components[entityID] = component;
+		components[_entityID] = _component;
+		std::cout << "Component Added " << std::endl;
 	}
 
-
-	bool hasComponent(int entityID)
+	bool hasComponent(int _entityID)
 	{
-		return components.contains(entityID) != components.end();
+		return components.contains(_entityID);
 	}
 
-	void removeComponent(int entityID)
+	void removeComponent(int _entityID)
 	{
-		components.erase(entityID);
+		components.erase(_entityID);
 		std::cout << "Component Removed" << std::endl;
 	}
 
-	T getComponent(int entityID)
+	T& getComponent(int _entityID)
 	{
-		return components[entityID];
+		return components[_entityID];
 	}
 
 	std::unordered_map<int, T> getComponents()
