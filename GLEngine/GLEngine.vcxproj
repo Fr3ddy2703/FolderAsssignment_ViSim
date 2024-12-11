@@ -140,9 +140,11 @@
     <ClCompile Include="Actor\Actor.cpp" />
     <ClCompile Include="Camera\camera.cpp" />
     <ClCompile Include="Collision\Collision.cpp" />
+    <ClCompile Include="Components\ComponentHandler\ComponentHandler.cpp" />
     <ClCompile Include="Components\ComponentManager.cpp" />
     <ClCompile Include="Components\Components.cpp" />
     <ClCompile Include="Components\Entity\Entity.cpp" />
+    <ClCompile Include="Components\Entity\EntityHandler\EntityHandler.cpp" />
     <ClCompile Include="Components\HealthComponents\HealthComponent.cpp" />
     <ClCompile Include="Components\PositionComponents\PositionComponent.cpp" />
     <ClCompile Include="Components\VelocityComponents\VelocityComponent.cpp" />
@@ -160,6 +162,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="LuaIntegration\LuaIntegration.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MathFunctions\MathFunctions.cpp" />
     <ClCompile Include="Meshes\BSplineSurface\BSplineSurface.cpp" />
@@ -182,9 +185,11 @@
     <ClInclude Include="Actor\Actor.h" />
     <ClInclude Include="Camera\camera.h" />
     <ClInclude Include="Collision\Collision.h" />
+    <ClInclude Include="Components\ComponentHandler\ComponentHandler.h" />
     <ClInclude Include="Components\ComponentManager.h" />
     <ClInclude Include="Components\Components.h" />
     <ClInclude Include="Components\Entity\Entity.h" />
+    <ClInclude Include="Components\Entity\EntityHandler\EntityHandler.h" />
     <ClInclude Include="Components\HealthComponents\HealthComponent.h" />
     <ClInclude Include="Components\PositionComponents\PositionComponent.h" />
     <ClInclude Include="Components\VelocityComponents\VelocityComponent.h" />
@@ -568,6 +573,7 @@
     <ClInclude Include="Libraries\libs\LASzip\dll\laszip_api.h" />
     <ClInclude Include="Libraries\libs\LASzip\include\laszip\laszip_api_version.h" />
     <ClInclude Include="Libraries\libs\LASzip\include\laszip\laszip_common.h" />
+    <ClInclude Include="LuaIntegration\LuaIntegration.h" />
     <ClInclude Include="MathFunctions\MathFunctions.h" />
     <ClInclude Include="Meshes\BSplineSurface\BSplineSurface.h" />
     <ClInclude Include="Meshes\Cubes\Cubes.h" />

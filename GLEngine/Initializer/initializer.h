@@ -7,6 +7,7 @@
 #include "../Meshes/PointCloud/PointCloud.h"
 #include "../Components/Entity/Entity.h"
 
+
 class ElementBuffer;
 class VertexBuffer;
 struct GLFWwindow;
@@ -51,13 +52,13 @@ public:
 	virtual void Run();
 	virtual void Update(float _deltaTime);
 
-	virtual ~initializer() = default;
+	/*virtual  ~initializer();*/
 	std::vector<Spheres> mBalls;
+	
 
 private:
 	/* private Shared Pointers */
-	std::vector<Cube> mCubes; 
-	std::vector<Entity> entities;
+	std::vector<Cube> mCubes;
 	std::shared_ptr<BSplineSurface> mBSplines;
 	std::shared_ptr<PointCloud> mPCloud;
 	std::shared_ptr<Player> mPlayer;

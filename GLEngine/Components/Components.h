@@ -3,7 +3,7 @@
 class Components
 {
 public:
-	 virtual void Component() {};
+	 virtual void Component() {}
 
 };
 

@@ -101,6 +101,17 @@ void Cube::Draw(ComponentManager<PositionComponent>& _position, int _id)
     glBindVertexArray(0);
 }
 
+void Cube::DrawSurface()
+{
+	glm::mat4 model = glm::mat4(1.f);
+    model = glm::translate(model,mPosition);
+    model = glm::scale(model, mSize);
+    glUniformMatrix4fv(glGetUniformLocation(Shader::ShaderProgram, "modelMatrix"), 1, GL_FALSE, glm::value_ptr(model));
+    glBindVertexArray(mVAO);
+    glDrawElements(GL_TRIANGLES, mIndices.size()*3, GL_UNSIGNED_INT, (void*)(0 * sizeof(unsigned int)));
+    glBindVertexArray(0);
+}
+
 void Cube::BindBuffer()
 {
     // VAO
